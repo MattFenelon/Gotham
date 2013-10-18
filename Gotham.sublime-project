@@ -1,0 +1,23 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "src\\helloworld"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "src\\Gotham"
+		}
+	],
+	"settings":
+	{
+		"GoSublime":
+		{
+			"env":
+			{
+				"GOPATH": "$GS_GOPATH"
+			}
+		}
+	}
+}

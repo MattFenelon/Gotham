@@ -1,0 +1,1 @@
+set gopath=%gopath%;%cd%
