@@ -1,1 +1,1 @@
-set gopath=%gopath%;%cd%
+set gopath=%cd%
