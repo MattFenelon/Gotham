@@ -3,10 +3,11 @@
 	[
 		{
 			"follow_symlinks": true,
+			"path": "src\\http_test"
 		},
 		{
 			"follow_symlinks": true,
-			"path": "src\\Gotham"
+			"path": "src\\gotham"
 		}
 	],
 	"settings":
