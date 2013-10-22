@@ -3,7 +3,6 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "src\\helloworld"
 		},
 		{
 			"follow_symlinks": true,
