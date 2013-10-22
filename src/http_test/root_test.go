@@ -33,9 +33,8 @@ func TestGetRootResource(t *testing.T) {
 			bodyBytes, _ := ioutil.ReadAll(response.Body)
 			body := string(bodyBytes)
 			So(body, ShouldEqual, `{
-	"set": [
+	"seriesset": [
 		{
-			"type": "series",
 			"title": "Prophet",
 			"links": {
 				"via": {"href": "/series/1"},
@@ -43,7 +42,6 @@ func TestGetRootResource(t *testing.T) {
 			},
 		},
 		{
-			"type": "series",
 			"title": "Jupiter's Legacy",
 			"links": {
 				"via": {"href": "/series/2"},

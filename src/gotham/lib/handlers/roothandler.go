@@ -15,9 +15,8 @@ func (handler *RootHandler) Get() (result *http.HttpResponse) {
 	result = &http.HttpResponse{
 		ContentType: "application/json",
 		Result: `{
-	"set": [
+	"seriesset": [
 		{
-			"type": "series",
 			"title": "Prophet",
 			"links": {
 				"via": {"href": "/series/1"},
@@ -25,7 +24,6 @@ func (handler *RootHandler) Get() (result *http.HttpResponse) {
 			},
 		},
 		{
-			"type": "series",
 			"title": "Jupiter's Legacy",
 			"links": {
 				"via": {"href": "/series/2"},
