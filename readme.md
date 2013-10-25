@@ -66,3 +66,23 @@ Content-Type: application/comics+json
 	]
 }
 ```
+
+### Comic resource
+
+*Request*
+```HTTP
+POST /books HTTP/1.1
+Host: gotham
+Accept: application/comics+json
+Content-Type: application/comics+json
+```
+```JSON
+{
+	"title": "Prophet 31"
+}
+```
+
+*Response*
+```HTTP
+HTTP/1.1 204 No Content
+```
