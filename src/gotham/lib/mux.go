@@ -14,7 +14,6 @@ func ServeHttp(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Add("Content-Type", response.ContentType)
 		io.WriteString(w, response.Result)
-
 		return
 	}
 
