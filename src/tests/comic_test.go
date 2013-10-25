@@ -2,48 +2,40 @@ package tests
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"domain"
+	"domainservices"
 	"testing"
 )
 
 func TestCreateComic(t *testing.T) {
 	id := uuid.NewRandom()
-	comicEvents := []*ComicAdded{} // TODO: repo
-	expected := NewComicAdded(id.String(), "Prophet", "Prophet 31")
+	repo := NewFakeComicRepository()
+	expected := domain.NewComicAdded(id.String(), "Prophet", "Prophet 31")
 
 	t.Log("When adding a new comic")
-	command := &CreateComicCommand{comicId: id, seriesTitle: "Prophet", bookTitle: "Prophet 31"}
-	AddComic(command, &comicEvents)
+	command := domainservices.NewCreateComicCommand(id, "Prophet", "Prophet 31")
+	domainservices.AddComic(command, repo) // TODO: Refactor to command processor
 
 	t.Log("\tIt should raise a comic added event")
-	AssertEquality(t, expected, comicEvents)
+	AssertEquality(t, expected, repo)
 }
 
-type CreateComicCommand struct {
-	comicId     uuid.UUID
-	seriesTitle string
-	bookTitle   string
+type FakeComicRepository struct {
+	events []*domain.ComicAdded // should be able to contain other types of event
 }
 
-func AddComic(command *CreateComicCommand, events *[]*ComicAdded) { // events should contain other events
-	event := NewComicAdded(command.comicId.String(), command.seriesTitle, command.bookTitle)
-	addedEvents := append(*events, event)
-	events = &addedEvents
+func NewFakeComicRepository() *FakeComicRepository {
+	return &FakeComicRepository{}
 }
 
-func NewComicAdded(comicId string, seriesTitle, bookTitle string) *ComicAdded {
-	return &ComicAdded{id: comicId, seriesTitle: seriesTitle, bookTitle: bookTitle}
+func (repo *FakeComicRepository) AddEvent(event *domain.ComicAdded) {
+	repo.events = append(repo.events, event)
 }
 
-type ComicAdded struct {
-	id          string // TODO: Create an identifier type
-	seriesTitle string
-	bookTitle   string
-}
-
-func AssertEquality(t *testing.T, expected *ComicAdded, actual []*ComicAdded) {
-	values := make([]ComicAdded, 0, len(actual))
+func AssertEquality(t *testing.T, expected *domain.ComicAdded, actual *FakeComicRepository) {
+	values := make([]domain.ComicAdded, 0, len(actual.events))
 	error := false
-	for _, event := range actual {
+	for _, event := range actual.events {
 		values = append(values, *event)
 		if *event != *expected {
 			error = true
