@@ -6,6 +6,9 @@ import (
 )
 
 func addComic(newId uuid.UUID, seriesTitle, bookTitle string, store EventStorer) {
-	event := domain.NewComicAdded(newId.String(), seriesTitle, bookTitle)
+	trimmedSeries := domain.NewTrimmedString(seriesTitle)
+	trimmedBook := domain.NewTrimmedString(bookTitle)
+
+	event := domain.NewComicAdded(newId.String(), trimmedSeries, trimmedBook)
 	store.AddEvent(event)
 }

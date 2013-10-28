@@ -1,11 +1,15 @@
 package domain
 
-type TrimmedString string
+import (
+	"strings"
+)
 
-func ToTrimmedString(value string) TrimmedString {
-	return TrimmedString(value)
+type trimmedString string
+
+func NewTrimmedString(value string) trimmedString {
+	return trimmedString(strings.TrimSpace(value))
 }
 
-func (t TrimmedString) String() string {
+func (t trimmedString) String() string {
 	return string(t)
 }
