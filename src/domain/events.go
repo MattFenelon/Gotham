@@ -2,10 +2,10 @@ package domain
 
 type ComicAdded struct {
 	Id          string // TODO: Create an identifier type
-	SeriesTitle trimmedString
-	BookTitle   trimmedString
+	SeriesTitle seriesTitle
+	BookTitle   bookTitle
 }
 
-func NewComicAdded(comicId string, seriesTitle, bookTitle trimmedString) *ComicAdded {
+func NewComicAdded(comicId string, seriesTitle seriesTitle, bookTitle bookTitle) *ComicAdded {
 	return &ComicAdded{Id: comicId, SeriesTitle: seriesTitle, BookTitle: bookTitle}
 }
