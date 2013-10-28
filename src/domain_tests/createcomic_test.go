@@ -8,13 +8,15 @@ import (
 )
 
 func TestCreateComic(t *testing.T) {
-	id := uuid.NewRandom()
 	eventStorer := NewFakeEventStorer()
+	domainservices.Configure(eventStorer)
+
+	id := uuid.NewRandom()
 	expected := domain.NewComicAdded(id.String(), "Prophet", "Prophet 31")
 
 	t.Log("When adding a new comic")
 	command := domainservices.NewCreateComicCommand(id, "Prophet", "Prophet 31")
-	domainservices.AddComic(command, eventStorer) // TODO: Refactor to command processor
+	domainservices.ProcessCommand(command) // Get command processor from container.
 
 	t.Log("\tIt should raise a comic added event")
 	AssertEquality(t, expected, eventStorer)
