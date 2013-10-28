@@ -2,14 +2,17 @@ package domainservices
 
 import (
 	"code.google.com/p/go-uuid/uuid"
+	"domain"
 )
 
 type CreateComicCommand struct {
 	comicId     uuid.UUID
-	seriesTitle string
+	seriesTitle domain.TrimmedString
 	bookTitle   string
 }
 
 func NewCreateComicCommand(comicId uuid.UUID, seriesTitle, bookTitle string) *CreateComicCommand {
-	return &CreateComicCommand{comicId: comicId, seriesTitle: seriesTitle, bookTitle: bookTitle}
+	// TODO: Validation
+	// Trim string
+	return &CreateComicCommand{comicId: comicId, seriesTitle: domain.ToTrimmedString(seriesTitle), bookTitle: bookTitle}
 }
