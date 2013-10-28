@@ -9,52 +9,53 @@ import (
 
 func TestCreateComic(t *testing.T) {
 	id := uuid.NewRandom()
-	repo := NewFakeComicRepository()
+	eventStorer := NewFakeEventStorer()
 	expected := domain.NewComicAdded(id.String(), "Prophet", "Prophet 31")
 
 	t.Log("When adding a new comic")
 	command := domainservices.NewCreateComicCommand(id, "Prophet", "Prophet 31")
-	domainservices.AddComic(command, repo) // TODO: Refactor to command processor
+	domainservices.AddComic(command, eventStorer) // TODO: Refactor to command processor
 
 	t.Log("\tIt should raise a comic added event")
-	AssertEquality(t, expected, repo)
+	AssertEquality(t, expected, eventStorer)
 }
 
 func TestCreateMultipleComics(t *testing.T) {
 	id := uuid.NewRandom()
-	repo := NewFakeComicRepository()
+	eventStorer := NewFakeEventStorer()
 	expected := []*domain.ComicAdded{
 		domain.NewComicAdded(id.String(), "Prophet", "Prophet 31"),
 		domain.NewComicAdded(id.String(), "Batman", "Batman 1")}
 
 	t.Log("When adding multiple comics")
 	command := domainservices.NewCreateComicCommand(id, "Prophet", "Prophet 31")
-	domainservices.AddComic(command, repo) // TODO: Refactor to command processor
+	domainservices.AddComic(command, eventStorer) // TODO: Refactor to command processor
 
 	command2 := domainservices.NewCreateComicCommand(id, "Batman", "Batman 1")
-	domainservices.AddComic(command2, repo) // TODO: Refactor to command processor
+	domainservices.AddComic(command2, eventStorer) // TODO: Refactor to command processor
 
 	t.Log("\tIt should raise a comic added event for all of the added comics")
-	AssertCollectionEquality(t, expected, repo)
+	AssertCollectionEquality(t, expected, eventStorer)
 }
 
-type FakeComicRepository struct {
+type FakeEventStorer struct {
 	events []*domain.ComicAdded // should be able to contain other types of event
 }
 
-func NewFakeComicRepository() *FakeComicRepository {
-	return &FakeComicRepository{}
+func NewFakeEventStorer() *FakeEventStorer {
+	return &FakeEventStorer{}
 }
 
-func (repo *FakeComicRepository) AddEvent(event *domain.ComicAdded) {
+func (repo *FakeEventStorer) AddEvent(event *domain.ComicAdded) {
 	repo.events = append(repo.events, event)
 }
 
-func AssertEquality(t *testing.T, expected *domain.ComicAdded, actual *FakeComicRepository) {
+func AssertEquality(t *testing.T, expected *domain.ComicAdded, actual *FakeEventStorer) {
 	AssertCollectionEquality(t, []*domain.ComicAdded{expected}, actual)
 }
 
-func AssertCollectionEquality(t *testing.T, expected []*domain.ComicAdded, actual *FakeComicRepository) {
+func AssertCollectionEquality(t *testing.T, expected []*domain.ComicAdded, actual *FakeEventStorer) {
+	// Write tests to test the assert methods
 	actualValues := make([]domain.ComicAdded, 0, len(actual.events))
 	expectedValues := make([]domain.ComicAdded, 0, len(expected))
 
