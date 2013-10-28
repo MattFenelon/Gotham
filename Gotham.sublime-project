@@ -11,15 +11,15 @@
 		},
 		{
 			"follow_symlinks": true,
-			"path": "src\\tests"
-		},
-		{
-			"follow_symlinks": true,
 			"path": "src\\domainservices"
 		},
 		{
 			"follow_symlinks": true,
 			"path": "src\\domain"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "src\\domain_tests"
 		}
 	],
 	"settings":
