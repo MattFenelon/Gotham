@@ -9,14 +9,13 @@ import (
 
 func TestCreateComic(t *testing.T) {
 	eventStorer := NewFakeEventStorer()
-	domainservices.Configure(eventStorer)
+	comics := domainservices.NewComicDomain(eventStorer)
 
 	id := uuid.NewRandom()
 	expected := domain.NewComicAdded(id.String(), "Prophet", "Prophet 31")
 
 	t.Log("When adding a new comic")
-	command := domainservices.NewCreateComicCommand(id, "Prophet", "Prophet 31")
-	domainservices.ProcessCommand(command) // Get command processor from container.
+	comics.AddComic(id, "Prophet", "Prophet 31")
 
 	t.Log("\tIt should raise a comic added event")
 	AssertEquality(t, expected, eventStorer)
@@ -24,6 +23,7 @@ func TestCreateComic(t *testing.T) {
 
 func TestCreateMultipleComics(t *testing.T) {
 	eventStorer := NewFakeEventStorer()
+	comics := domainservices.NewComicDomain(eventStorer)
 
 	id1 := uuid.NewRandom()
 	id2 := uuid.NewRandom()
@@ -32,11 +32,8 @@ func TestCreateMultipleComics(t *testing.T) {
 		domain.NewComicAdded(id2.String(), "Batman", "Batman 1")}
 
 	t.Log("When adding multiple comics")
-	command := domainservices.NewCreateComicCommand(id1, "Prophet", "Prophet 31")
-	domainservices.AddComic(command, eventStorer) // TODO: Refactor to command processor
-
-	command2 := domainservices.NewCreateComicCommand(id2, "Batman", "Batman 1")
-	domainservices.AddComic(command2, eventStorer) // TODO: Refactor to command processor
+	comics.AddComic(id1, "Prophet", "Prophet 31")
+	comics.AddComic(id2, "Batman", "Batman 1")
 
 	t.Log("\tIt should raise a comic added event for all of the added comics")
 	AssertCollectionEquality(t, expected, eventStorer)

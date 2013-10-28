@@ -1,10 +1,11 @@
 package domainservices
 
 import (
+	"code.google.com/p/go-uuid/uuid"
 	"domain"
 )
 
-func AddComic(command *CreateComicCommand, store EventStorer) {
-	event := domain.NewComicAdded(command.comicId.String(), command.seriesTitle.String(), command.bookTitle)
+func addComic(newId uuid.UUID, seriesTitle, bookTitle string, store EventStorer) {
+	event := domain.NewComicAdded(newId.String(), seriesTitle, bookTitle)
 	store.AddEvent(event)
 }
