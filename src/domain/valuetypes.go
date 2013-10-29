@@ -24,7 +24,7 @@ func NewSeriesTitle(value string) (seriesTitle, error) {
 		return seriesTitle(trimmed), nil
 	}
 
-	return "", errors.New("Series title's cannot be empty")
+	return "", errors.New("Series title cannot be empty")
 }
 
 type bookTitle trimmedString
@@ -34,7 +34,7 @@ func NewBookTitle(value string) (bookTitle, error) {
 		return bookTitle(trimmed), nil
 	}
 
-	return "", errors.New("Book title's cannot be empty")
+	return "", errors.New("Book title cannot be empty")
 }
 
 type comicId uuid.UUID

@@ -61,7 +61,7 @@ func TestCreateComicNoBookTitle(t *testing.T) {
 	err := comics.AddComic(uuid.NewRandom(), "Batman & Robin", "")
 
 	t.Log("\tIt should return an error specifying that a book title is required")
-	if err == nil || err.Error() != "Book title's cannot be empty" {
+	if err == nil || err.Error() != "Book title cannot be empty" {
 		t.Errorf("\t\tError was %#v", err)
 	}
 
@@ -77,7 +77,7 @@ func TestCreateComicNoSeriesTitle(t *testing.T) {
 	err := comics.AddComic(uuid.NewRandom(), "", "Batman 99")
 
 	t.Log("\tIt should return an error specifying that a series title is required")
-	if err == nil || err.Error() != "Series title's cannot be empty" {
+	if err == nil || err.Error() != "Series title cannot be empty" {
 		t.Errorf("\t\tError was %#v", err)
 	}
 
