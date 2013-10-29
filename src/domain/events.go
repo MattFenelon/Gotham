@@ -5,7 +5,7 @@ import (
 )
 
 type ComicAdded struct {
-	Id          comicId // TODO: Create an identifier type
+	Id          comicId
 	SeriesTitle seriesTitle
 	BookTitle   bookTitle
 }
