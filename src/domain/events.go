@@ -7,11 +7,11 @@ import (
 type ComicAdded struct {
 	Id          comicId
 	SeriesTitle seriesTitle
-	BookTitle   bookTitle
+	Title   bookTitle
 }
 
 func NewComicAdded(comicId comicId, seriesTitle seriesTitle, bookTitle bookTitle) *ComicAdded {
-	return &ComicAdded{Id: comicId, SeriesTitle: seriesTitle, BookTitle: bookTitle}
+	return &ComicAdded{Id: comicId, SeriesTitle: seriesTitle, Title: bookTitle}
 }
 
 func (a ComicAdded) Equal(b interface{}) bool {
@@ -27,9 +27,9 @@ func (a ComicAdded) Equal(b interface{}) bool {
 }
 
 func (a ComicAdded) EqualTo(b ComicAdded) bool {
-	return a.Id.Equal(b.Id) && a.SeriesTitle == b.SeriesTitle && a.BookTitle == b.BookTitle
+	return a.Id.Equal(b.Id) && a.SeriesTitle == b.SeriesTitle && a.Title == b.Title
 }
 
 func (ca ComicAdded) String() string {
-	return fmt.Sprintf("%T:{id: %v, seriesTitle: \"%v\", bookTitle: \"%v\"}", ca, ca.Id, ca.SeriesTitle, ca.BookTitle)
+	return fmt.Sprintf("%T:{id: %v, seriesTitle: \"%v\", bookTitle: \"%v\"}", ca, ca.Id, ca.SeriesTitle, ca.Title)
 }

@@ -30,19 +30,19 @@ func buildTests() []equalityTest {
 			"Another type":    testType{}}})
 
 	id := uuid.NewRandom()
-	sourceComicAdded := NewComicAdded(id, "SeriesTitle", "BookTitle")
+	sourceComicAdded := NewComicAdded(id, "SeriesTitle", "Title")
 	tests = append(tests, equalityTest{
 		source: sourceComicAdded,
 		sameAs: map[string]interface{}{
 			"Same variable":      sourceComicAdded,
 			"Deferenced pointer": *sourceComicAdded,
-			"Same field values":  NewComicAdded(id, "SeriesTitle", "BookTitle")},
+			"Same field values":  NewComicAdded(id, "SeriesTitle", "Title")},
 		differentTo: map[string]interface{}{
-			"Different Id":          NewComicAdded(uuid.NewRandom(), "SeriesTitle", "BookTitle"),
-			"Different SeriesTitle": NewComicAdded(id, "Different Series Title", "BookTitle"),
-			"Different BookTitle":   NewComicAdded(id, "SeriesTitle", "Different Book Title"),
-			"Nil":          nil,
-			"Another type": testType{}}})
+			"Different Id":          NewComicAdded(uuid.NewRandom(), "SeriesTitle", "Title"),
+			"Different SeriesTitle": NewComicAdded(id, "Different Series Title", "Title"),
+			"Different Title":       NewComicAdded(id, "SeriesTitle", "Different Book Title"),
+			"Nil":                   nil,
+			"Another type":          testType{}}})
 
 	return tests
 }
