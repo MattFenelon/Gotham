@@ -57,15 +57,21 @@ func TestCreateComicNoBookTitle(t *testing.T) {
 	eventStorer := NewFakeEventStorer()
 	comics := domainservices.NewComicDomain(eventStorer)
 
-	t.Log("When adding a new comic without a book title")
-	err := comics.AddComic(uuid.NewRandom(), "Batman & Robin", "")
+	t.Log("When the book title is an empty string\nor is only whitespace")
+	emptyErr := comics.AddComic(uuid.NewRandom(), "Batman & Robin", "")
+	whitespaceErr := comics.AddComic(uuid.NewRandom(), "Batman & Robin", "\t\n\v\f\r\u0085\u00A0")
 
-	t.Log("\tIt should return an error specifying that a book title is required")
-	if err == nil || err.Error() != "Book title cannot be empty" {
-		t.Errorf("\t\tError was %#v", err)
+	t.Log("\tFor the empty string it should return an error specifying that a book title is required")
+	if emptyErr == nil || emptyErr.Error() != "Book title cannot be empty" {
+		t.Errorf("\t\tError was %#v", emptyErr)
 	}
 
-	t.Log("\tIt should not add the comic")
+	t.Log("\tFor the whitespace string it should return an error specifying that a book title is required")
+	if whitespaceErr == nil || whitespaceErr.Error() != "Book title cannot be empty" {
+		t.Errorf("\t\tError was %#v", emptyErr)
+	}
+
+	t.Log("\tIt should not add the comics")
 	AssertCollectionIsEmpty(t, eventStorer)
 }
 
@@ -73,15 +79,21 @@ func TestCreateComicNoSeriesTitle(t *testing.T) {
 	eventStorer := NewFakeEventStorer()
 	comics := domainservices.NewComicDomain(eventStorer)
 
-	t.Log("When adding a new comic without a book title")
-	err := comics.AddComic(uuid.NewRandom(), "", "Batman 99")
+	t.Log("When the series title is an empty string\nor is only whitespace")
+	emptyErr := comics.AddComic(uuid.NewRandom(), "", "Batman 99")
+	whitespaceErr := comics.AddComic(uuid.NewRandom(), "\t\n\v\f\r\u0085\u00A0", "Batman 99")
 
-	t.Log("\tIt should return an error specifying that a series title is required")
-	if err == nil || err.Error() != "Series title cannot be empty" {
-		t.Errorf("\t\tError was %#v", err)
+	t.Log("\tFor the empty string it should return an error specifying that a series title is required")
+	if emptyErr == nil || emptyErr.Error() != "Series title cannot be empty" {
+		t.Errorf("\t\tError was %#v", emptyErr)
 	}
 
-	t.Log("\tIt should not add the comic")
+	t.Log("\tFor the whitespace string it should return an error specifying that a series title is required")
+	if whitespaceErr == nil || whitespaceErr.Error() != "Series title cannot be empty" {
+		t.Errorf("\t\tError was %#v", emptyErr)
+	}
+
+	t.Log("\tIt should not add the comics")
 	AssertCollectionIsEmpty(t, eventStorer)
 }
 
