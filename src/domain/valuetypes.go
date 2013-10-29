@@ -39,8 +39,16 @@ func NewBookTitle(value string) (bookTitle, error) {
 
 type comicId uuid.UUID
 
-func NewComicId(uuid uuid.UUID) comicId {
-	return comicId(uuid)
+func NewComicId(id uuid.UUID) comicId {
+	return comicId(id)
+}
+
+func ParseComicId(id string) comicId {
+	if parsed := uuid.Parse(id); parsed != nil {
+		return NewComicId(parsed)
+	}
+
+	return nil
 }
 
 func NewRandomComicId() comicId {
@@ -51,6 +59,18 @@ func (id comicId) String() string {
 	return uuid.UUID(id).String()
 }
 
-func (a comicId) Equal(b comicId) bool {
+func (a comicId) Equal(b interface{}) bool {
+	if v, ok := b.(comicId); ok {
+		return a.EqualTo(v)
+	}
+
+	if p, ok := b.(*comicId); ok {
+		return a.EqualTo(*p)
+	}
+
+	return false
+}
+
+func (a comicId) EqualTo(b comicId) bool {
 	return bytes.Equal(a, b)
 }

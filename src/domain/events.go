@@ -15,8 +15,12 @@ func NewComicAdded(comicId comicId, seriesTitle seriesTitle, bookTitle bookTitle
 }
 
 func (a ComicAdded) Equal(b interface{}) bool {
-	if r, ok := b.(ComicAdded); ok {
-		return a.EqualTo(r)
+	if v, ok := b.(ComicAdded); ok {
+		return a.EqualTo(v)
+	}
+
+	if p, ok := b.(*ComicAdded); ok {
+		return a.EqualTo(*p)
 	}
 
 	return false
