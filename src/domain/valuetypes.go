@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// A trimmedString represents a string that has been normalised to remove
+// any whitespace before or after the string.
 type trimmedString string
 
 func NewTrimmedString(value string) trimmedString {
@@ -17,6 +19,9 @@ func (t trimmedString) String() string {
 	return string(t)
 }
 
+// A seriesTitle represents the name for a collection of comic books,
+// e.g. Batman #1 belongs to the Batman series.
+// Series titles cannot be empty nor can they be padded with whitespace.
 type seriesTitle trimmedString
 
 func NewSeriesTitle(value string) (seriesTitle, error) {
@@ -27,6 +32,8 @@ func NewSeriesTitle(value string) (seriesTitle, error) {
 	return "", errors.New("Series title cannot be empty")
 }
 
+// A bookTitle represents the title of a comic book.
+// Book titles cannot be empty nor can they be padded with whitespace.
 type bookTitle trimmedString
 
 func NewBookTitle(value string) (bookTitle, error) {
@@ -37,6 +44,9 @@ func NewBookTitle(value string) (bookTitle, error) {
 	return "", errors.New("Book title cannot be empty")
 }
 
+// A comicId represents the unique identity of a comic.
+// A comicId is a 128 bit (16 byte) Universal Unique IDentifier as defined in RFC
+// 4122.
 type comicId uuid.UUID
 
 func NewComicId(id uuid.UUID) comicId {
