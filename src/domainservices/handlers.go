@@ -16,7 +16,7 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, store EventStorer)
 		return err
 	}
 
-	event := domain.NewComicAdded(newId.String(), series, title)
+	event := domain.NewComicAdded(domain.NewComicId(newId), series, title)
 	store.AddEvent(event)
 
 	return nil

@@ -7,10 +7,11 @@ import (
 	"testing"
 )
 
-func NewComicAdded(id, seriesTitle, bookTitle string) *domain.ComicAdded {
+func NewComicAdded(id uuid.UUID, seriesTitle, bookTitle string) *domain.ComicAdded {
 	series, _ := domain.NewSeriesTitle(seriesTitle)
 	book, _ := domain.NewBookTitle(bookTitle)
-	return domain.NewComicAdded(id, series, book)
+	comicId := domain.NewComicId(id)
+	return domain.NewComicAdded(comicId, series, book)
 }
 
 func TestCreateComic(t *testing.T) {
@@ -18,7 +19,7 @@ func TestCreateComic(t *testing.T) {
 	comics := domainservices.NewComicDomain(eventStorer)
 
 	id := uuid.NewRandom()
-	expected := NewComicAdded(id.String(), "Prophet", "Prophet 31")
+	expected := NewComicAdded(id, "Prophet", "Prophet 31")
 
 	t.Log("When adding a new comic")
 	comics.AddComic(id, "Prophet", "Prophet 31")
@@ -34,8 +35,8 @@ func TestCreateMultipleComics(t *testing.T) {
 	id1 := uuid.NewRandom()
 	id2 := uuid.NewRandom()
 	expected := []*domain.ComicAdded{
-		NewComicAdded(id1.String(), "Prophet", "Prophet 31"),
-		NewComicAdded(id2.String(), "Batman", "Batman 1")}
+		NewComicAdded(id1, "Prophet", "Prophet 31"),
+		NewComicAdded(id2, "Batman", "Batman 1")}
 
 	t.Log("When adding multiple comics")
 	comics.AddComic(id1, "Prophet", "Prophet 31")
@@ -50,7 +51,7 @@ func TestCreateComicTitleTrimming(t *testing.T) {
 	comics := domainservices.NewComicDomain(eventStorer)
 
 	id := uuid.NewRandom()
-	expected := NewComicAdded(id.String(), "Series With Whitespace", "Title With Whitespace")
+	expected := NewComicAdded(id, "Series With Whitespace", "Title With Whitespace")
 
 	t.Log("When adding a new comic with whitespace in the book title and series title")
 	comics.AddComic(id, "\t\n\v\f\r\u0085\u00A0Series With Whitespace\t\n\v\f\r\u0085\u00A0", "\t\n\v\f\r\u0085\u00A0Title With Whitespace\t\n\v\f\r\u0085\u00A0")

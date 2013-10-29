@@ -1,6 +1,8 @@
 package domain
 
 import (
+	"bytes"
+	"code.google.com/p/go-uuid/uuid"
 	"errors"
 	"strings"
 )
@@ -21,6 +23,7 @@ func NewSeriesTitle(value string) (seriesTitle, error) {
 	if trimmed := NewTrimmedString(value); trimmed != "" {
 		return seriesTitle(trimmed), nil
 	}
+
 	return "", errors.New("Series title's cannot be empty")
 }
 
@@ -32,4 +35,22 @@ func NewBookTitle(value string) (bookTitle, error) {
 	}
 
 	return "", errors.New("Book title's cannot be empty")
+}
+
+type comicId uuid.UUID
+
+func NewComicId(uuid uuid.UUID) comicId {
+	return comicId(uuid)
+}
+
+func NewRandomComicId() comicId {
+	return NewComicId(uuid.NewRandom())
+}
+
+func (id comicId) String() string {
+	return uuid.UUID(id).String()
+}
+
+func (a comicId) Equal(b comicId) bool {
+	return bytes.Equal(a, b)
 }
