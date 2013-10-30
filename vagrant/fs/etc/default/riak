@@ -1,0 +1,2 @@
+# Increase number of allowed open files. See http://docs.basho.com/riak/latest/ops/tuning/open-files-limit/
+ulimit -n 65536
