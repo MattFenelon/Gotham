@@ -3,23 +3,8 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "src\\http_test"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "src\\gotham"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "src\\domainservices"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "src\\domain"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "src\\domain_tests"
+			"path": "C:\\dev\\Gotham",
+			"folder_exclude_patterns": ["bin", "pkg", ".vagrant"],
 		}
 	],
 	"settings":
