@@ -78,7 +78,7 @@ Content-Type: application/comics+json
 ```
 ```JSON
 {
-	"seriesTitle": "Prophet"
+	"seriesTitle": "Prophet",
 	"title": "Prophet 31"
 }
 ```
