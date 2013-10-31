@@ -2,16 +2,14 @@ package riak_tests
 
 import (
 	"domain"
-	"persistence"
+	"persistence/riak"
 	"testing"
 )
 
 var riakCluster = []string{"127.0.0.1:8080"}
 var riakClientId = "AutomatedTestClient"
 
-// TODO: Rename file?
-
-func TestComicAdded(t *testing.T) { // TODO: Better test name
+func TestComicAdded(t *testing.T) {
 	t.Log("When adding a single comic")
 
 	seriesTitle, _ := domain.NewSeriesTitle("Prophet")
@@ -54,7 +52,7 @@ func TestAddingMultipleEvents(t *testing.T) {
 }
 
 func StoreEvent(t *testing.T, event *domain.ComicAdded) {
-	store := persistence.NewRiakEventStore(riakCluster, riakClientId)
+	store := riak.NewRiakEventStore(riakCluster, riakClientId)
 	if err := store.AddComic(event); err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +60,7 @@ func StoreEvent(t *testing.T, event *domain.ComicAdded) {
 
 // TODO: What type should comicId be? What's the correct interface into the domain?
 func GetEvent(t *testing.T, comicId string) (event *domain.ComicAdded) {
-	store := persistence.NewRiakEventStore(riakCluster, riakClientId)
+	store := riak.NewRiakEventStore(riakCluster, riakClientId)
 	event, err := store.GetEvent(comicId)
 	if err != nil {
 		t.Fatal(err)
@@ -71,7 +69,7 @@ func GetEvent(t *testing.T, comicId string) (event *domain.ComicAdded) {
 }
 
 func DeleteEvent(t *testing.T, comicId string) {
-	store := persistence.NewRiakEventStore(riakCluster, riakClientId)
+	store := riak.NewRiakEventStore(riakCluster, riakClientId)
 	if err := store.DeleteEvent(comicId); err != nil {
 		t.Fatal(err)
 	}
