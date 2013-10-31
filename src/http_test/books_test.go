@@ -11,7 +11,7 @@ import (
 )
 
 func TestAddBook(t *testing.T) {
-	t.Log("POST /books/")
+	t.Log("POST /books")
 
 	store := persistence.NewInMemoryEventStore()
 	exports := lib.Configure(store)
@@ -49,7 +49,7 @@ func TestAddBook(t *testing.T) {
 }
 
 func TestAddBookWithInvalidJSON(t *testing.T) {
-	t.Log("POST /books/")
+	t.Log("POST /books")
 
 	store := persistence.NewInMemoryEventStore()
 	exports := lib.Configure(store)
@@ -83,8 +83,46 @@ func TestAddBookWithInvalidJSON(t *testing.T) {
 	}
 }
 
+func TestAddBookWithInvalidContentType(t *testing.T) {
+	t.Log("POST /books")
+
+	store := persistence.NewInMemoryEventStore()
+	exports := lib.Configure(store)
+	server := httptest.NewServer(exports.Handler)
+	defer server.Close()
+
+	reader := strings.NewReader(`{
+	"seriesTitle": "Prophet",
+	"title": "Prophet 31"
+}`)
+	rsp, err := http.Post(server.URL+"/books", "invalid/mediatype", reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer rsp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(rsp.Body)
+	body := string(bodyBytes)
+
+	t.Log("The response should be 415 Unsupported Media Type")
+	if rsp.StatusCode != 415 {
+		t.Errorf("\tExpected 415 but was %v", rsp.StatusCode)
+	}
+
+	t.Log("The response body should be empty")
+	if body != "" {
+		t.Errorf("\tExpected \"\" but was %v", body)
+	}
+
+	t.Log("The comic should not be persisted")
+	actualEvents := store.GetAllEvents()
+	if len(actualEvents) != 0 {
+		t.Errorf("\tExpected 0 items but contained %v", actualEvents)
+	}
+}
+
 func TestAddBookWithEmptyJSON(t *testing.T) {
-	t.Log("POST /books/")
+	t.Log("POST /books")
 
 	store := persistence.NewInMemoryEventStore()
 	exports := lib.Configure(store)
@@ -115,5 +153,33 @@ func TestAddBookWithEmptyJSON(t *testing.T) {
 	actualEvents := store.GetAllEvents()
 	if len(actualEvents) != 0 {
 		t.Errorf("\tExpected 0 items but contained %v", actualEvents)
+	}
+}
+
+func TestGet(t *testing.T) {
+	t.Log("GET /books")
+
+	store := persistence.NewInMemoryEventStore()
+	exports := lib.Configure(store)
+	server := httptest.NewServer(exports.Handler)
+	defer server.Close()
+
+	rsp, err := http.Get(server.URL + "/books")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer rsp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(rsp.Body)
+	body := string(bodyBytes)
+
+	t.Log("The response should be 405 Method Not Allowed")
+	if rsp.StatusCode != 405 {
+		t.Errorf("\tExpected 405 but was %v", rsp.StatusCode)
+	}
+
+	t.Log("The response body should be empty")
+	if body != "" {
+		t.Errorf("\tExpected \"\" but was %v", body)
 	}
 }

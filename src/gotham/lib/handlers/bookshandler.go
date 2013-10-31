@@ -13,6 +13,16 @@ type booksPostRequest struct {
 }
 
 func BooksHandler(w http.ResponseWriter, r *http.Request, storer domainservices.EventStorer) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	if r.Header.Get("Content-Type") != "application/json" {
+		w.WriteHeader(http.StatusUnsupportedMediaType)
+		return
+	}
+
 	dec := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 
