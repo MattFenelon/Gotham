@@ -49,7 +49,7 @@ func (r *RiakEventStore) AddComic(event *domain.ComicAdded) error {
 	// TODO: Where should the bucket name come from?
 	// Key change required.
 	// Set the content type
-	if _, err := client.StoreObject("testbucket", "test", buffer.Bytes()); err != nil {
+	if _, err := client.StoreObject("testbucket", event.Id.String(), buffer.Bytes()); err != nil {
 		return err
 	}
 
@@ -66,7 +66,7 @@ func (r *RiakEventStore) GetEvent(comicId string) (event *domain.ComicAdded, err
 		client.Close()
 	}()
 
-	rsp, err := client.FetchObject("testbucket", "test")
+	rsp, err := client.FetchObject("testbucket", comicId)
 	if err != nil {
 		return nil, err
 	}
@@ -81,4 +81,21 @@ func (r *RiakEventStore) GetEvent(comicId string) (event *domain.ComicAdded, err
 	}
 
 	return event, nil
+}
+
+func (r *RiakEventStore) DeleteEvent(comicId string) error {
+	client, err := r.connect()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		// TODO: Catch panic when close fails.
+		client.Close()
+	}()
+
+	if _, err = client.DeleteObject("testbucket", comicId); err != nil {
+		return err
+	}
+
+	return nil
 }
