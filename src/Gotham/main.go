@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	exports := lib.Configure()
+	exports := lib.Configure(nil)
 
 	err := http.ListenAndServe(":7001", exports.Handler)
 	if err != nil {

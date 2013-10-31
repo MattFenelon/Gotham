@@ -6,11 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"persistence"
 	"testing"
 )
 
 func TestGetRootResource(t *testing.T) {
-	exports := lib.Configure()
+	exports := lib.Configure(persistence.NewInMemoryEventStore())
 	server := httptest.NewServer(exports.Handler)
 	defer server.Close()
 

@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"domainservices"
 	"net/http"
 )
 
@@ -8,7 +9,7 @@ type Exports struct {
 	Handler http.Handler
 }
 
-func Configure() (exports Exports) {
+func Configure(store domainservices.EventStorer) (exports Exports) {
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/", ServeHttp)
 

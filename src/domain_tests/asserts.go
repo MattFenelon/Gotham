@@ -14,11 +14,11 @@ func AssertEquality(t *testing.T, expected *domain.ComicAdded, actual *FakeEvent
 }
 
 func AssertCollectionIsEmpty(t *testing.T, actual *FakeEventStorer) {
-	if len(actual.events) == 0 {
+	if len(actual.GetAllEvents()) == 0 {
 		return
 	}
 
-	events := actual.events
+	events := actual.GetAllEvents()
 	actualValues := make([]domain.ComicAdded, 0, len(events))
 	for _, event := range events {
 		actualValues = append(actualValues, *event)
@@ -29,7 +29,7 @@ func AssertCollectionIsEmpty(t *testing.T, actual *FakeEventStorer) {
 }
 
 func AssertCollectionEquality(t *testing.T, expected []*domain.ComicAdded, actual *FakeEventStorer) {
-	actualValues := make([]equaler, 0, len(actual.events))
+	actualValues := make([]equaler, 0, len(actual.GetAllEvents()))
 	expectedValues := make([]equaler, 0, len(expected))
 
 	for _, expectedEvent := range expected {
@@ -37,7 +37,7 @@ func AssertCollectionEquality(t *testing.T, expected []*domain.ComicAdded, actua
 	}
 
 	error := false
-	for _, actualEvent := range actual.events {
+	for _, actualEvent := range actual.GetAllEvents() {
 		actual := *actualEvent
 		actualValues = append(actualValues, equaler(actual))
 
