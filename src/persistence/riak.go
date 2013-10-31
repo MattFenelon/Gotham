@@ -7,23 +7,30 @@ import (
 	"github.com/mrb/riakpbc"
 )
 
+// TODO: Keep connections open for the length of a HTTP request rather than opening and closing
+// the connection for each operation.
+
 type RiakEventStore struct {
+	cluster  []string
+	clientId string
 }
 
-func NewRiakEventStore() *RiakEventStore {
-	return &RiakEventStore{}
+func NewRiakEventStore(cluster []string, clientId string) *RiakEventStore {
+	return &RiakEventStore{
+		cluster:  cluster,
+		clientId: clientId}
 }
 
 func (r *RiakEventStore) connect() (client *riakpbc.Client, err error) {
 	// TODO: Error if Riak database is not running
-	// Network addresses should be configurable
-	client = riakpbc.NewClient([]string{"127.0.0.1:8080"})
+	// TODO: Network addresses should be configurable
+	client = riakpbc.NewClient(r.cluster)
 	if err = client.Dial(); err != nil {
 		return client, err
 	}
 
 	// TODO: Better ClientId
-	if _, err = client.SetClientId("test"); err != nil {
+	if _, err = client.SetClientId(r.clientId); err != nil {
 		return client, err
 	}
 
