@@ -71,16 +71,16 @@ func (id comicId) String() string {
 
 func (a comicId) Equal(b interface{}) bool {
 	if v, ok := b.(comicId); ok {
-		return a.EqualTo(v)
+		return a.equalTo(v)
 	}
 
 	if p, ok := b.(*comicId); ok {
-		return a.EqualTo(*p)
+		return a.equalTo(*p)
 	}
 
 	return false
 }
 
-func (a comicId) EqualTo(b comicId) bool {
+func (a comicId) equalTo(b comicId) bool {
 	return bytes.Equal(a, b)
 }

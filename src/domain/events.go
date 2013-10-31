@@ -7,7 +7,7 @@ import (
 type ComicAdded struct {
 	Id          comicId
 	SeriesTitle seriesTitle
-	Title   bookTitle
+	Title       bookTitle
 }
 
 func NewComicAdded(comicId comicId, seriesTitle seriesTitle, bookTitle bookTitle) *ComicAdded {
@@ -16,17 +16,17 @@ func NewComicAdded(comicId comicId, seriesTitle seriesTitle, bookTitle bookTitle
 
 func (a ComicAdded) Equal(b interface{}) bool {
 	if v, ok := b.(ComicAdded); ok {
-		return a.EqualTo(v)
+		return a.equalTo(&v)
 	}
 
 	if p, ok := b.(*ComicAdded); ok {
-		return a.EqualTo(*p)
+		return a.equalTo(p)
 	}
 
 	return false
 }
 
-func (a ComicAdded) EqualTo(b ComicAdded) bool {
+func (a *ComicAdded) equalTo(b *ComicAdded) bool {
 	return a.Id.Equal(b.Id) && a.SeriesTitle == b.SeriesTitle && a.Title == b.Title
 }
 
