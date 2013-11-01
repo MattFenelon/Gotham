@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"domain"
 	"encoding/gob"
-	"github.com/mrb/riakpbc"
+	"github.com/MattFenelon/riakpbc"
 )
 
 // TODO: Keep connections open for the length of a HTTP request rather than opening and closing
