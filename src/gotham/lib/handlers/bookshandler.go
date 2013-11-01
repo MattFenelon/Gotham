@@ -33,7 +33,7 @@ func BooksHandler(w http.ResponseWriter, r *http.Request, storer domainservices.
 	}
 
 	comics := domainservices.NewComicDomain(storer)
-	if err := comics.AddComic(uuid.NewRandom(), request.SeriesTitle, request.Title); err != nil {
+	if err := comics.AddComic(uuid.NewRandom(), request.SeriesTitle, request.Title); err != nil { // TODO: Raise different types of errors, i.e. database
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
