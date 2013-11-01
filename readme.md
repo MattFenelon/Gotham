@@ -69,18 +69,44 @@ Content-Type: application/comics+json
 
 ### Comic resource
 
+The comic resource can be used to add comics.
+
+Requests are formed as multipart/mixed. The first part is expected to be the metadata for the comic represented as application/json. The subsequent parts are the page images for the comic. The page images must be in the order by which they are to be displayed. The only page image format currently supported is image/jpeg.
+
+A comic must have at least 1 page image.
+
 *Request*
 ```HTTP
 POST /books HTTP/1.1
 Host: gotham
-Accept: application/comics+json
-Content-Type: application/comics+json
+Accept: application/json
+Content-Type: multipart/mixed; boundary=Any-ASCII-string
 ```
-```JSON
+```HTTP
+
+--Any-ASCII-string
+Content-Type: application/json
+
 {
 	"seriesTitle": "Prophet",
-	"title": "Prophet 31"
+	"title": "Prophet 31",
 }
+--Any-ASCII-string
+Content-Disposition: attachment; filename="00.jpg"
+Content-Type: image/jpeg
+
+<Binary content goes here>
+--Any-ASCII-string
+Content-Disposition: attachment; filename="01.jpg"
+Content-Type: image/jpeg
+
+<Binary content goes here>
+--Any-ASCII-string
+Content-Disposition: attachment; filename="nn.jpg"
+Content-Type: image/jpeg
+
+<Binary content goes here>
+--Any-ASCII-string--
 ```
 
 *Response*
