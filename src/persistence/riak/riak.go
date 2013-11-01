@@ -37,7 +37,7 @@ func (r *RiakEventStore) connect() (client *riakpbc.Client, err error) {
 	return client, nil
 }
 
-func (r *RiakEventStore) AddComic(event *domain.ComicAdded) error {
+func (r *RiakEventStore) AddEvent(event *domain.ComicAdded) error {
 	client, err := r.connect()
 	if err != nil {
 		return err

@@ -53,7 +53,7 @@ func TestAddingMultipleEvents(t *testing.T) {
 
 func StoreEvent(t *testing.T, event *domain.ComicAdded) {
 	store := riak.NewRiakEventStore(riakCluster, riakClientId)
-	if err := store.AddComic(event); err != nil {
+	if err := store.AddEvent(event); err != nil {
 		t.Fatal(err)
 	}
 }

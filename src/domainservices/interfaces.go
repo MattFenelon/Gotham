@@ -5,5 +5,5 @@ import (
 )
 
 type EventStorer interface {
-	AddEvent(event *domain.ComicAdded)
+	AddEvent(event *domain.ComicAdded) error
 }

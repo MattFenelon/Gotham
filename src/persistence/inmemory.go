@@ -12,8 +12,9 @@ func NewInMemoryEventStore() *InMemoryEventStore {
 	return &InMemoryEventStore{}
 }
 
-func (store *InMemoryEventStore) AddEvent(event *domain.ComicAdded) {
+func (store *InMemoryEventStore) AddEvent(event *domain.ComicAdded) error {
 	store.events = append(store.events, event)
+	return nil
 }
 
 func (store *InMemoryEventStore) GetAllEvents() []*domain.ComicAdded {
