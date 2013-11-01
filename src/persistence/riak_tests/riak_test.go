@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var riakCluster = []string{"127.0.0.1:8080"}
+var riakCluster = []string{"127.0.0.1:8087"}
 var riakClientId = "AutomatedTestClient"
 
 func TestComicAdded(t *testing.T) {
