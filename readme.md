@@ -82,7 +82,7 @@ Host: gotham
 Accept: application/json
 Content-Type: multipart/mixed; boundary=Any-ASCII-string
 ```
-```HTTP
+```
 
 --Any-ASCII-string
 Content-Type: application/json
