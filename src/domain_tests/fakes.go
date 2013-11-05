@@ -13,20 +13,11 @@ func NewFakeEventStorer() *FakeEventStorer {
 }
 
 type FakeFileStore struct {
-	stored map[string][]string
+	*persistence.InMemoryFileStore
 }
 
 func NewFakeFileStore() *FakeFileStore {
 	return &FakeFileStore{
-		stored: make(map[string][]string),
+		InMemoryFileStore: persistence.NewInMemoryFileStore(),
 	}
-}
-
-func (f *FakeFileStore) Store(key string, filepaths []string) error {
-	f.stored[key] = filepaths
-	return nil
-}
-
-func (f *FakeFileStore) GetAll(key string) []string {
-	return f.stored[key]
 }
