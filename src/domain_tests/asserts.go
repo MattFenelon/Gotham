@@ -30,17 +30,17 @@ func AssertCollectionEquality(t *testing.T, expected interface{}, actual interfa
 	ev := reflect.ValueOf(expected)
 	av := reflect.ValueOf(actual)
 
-	for ai := 0; ai < av.Len(); ai++ {
-		found := false
-		for ei := 0; ei < ev.Len(); ei++ {
-			if found = isEqual(av.Index(ai), ev.Index(ei)); found {
+	if av.Len() != ev.Len() {
+		error = true
+	} else {
+		for i := 0; i < av.Len(); i++ {
+			if isEqual(av.Index(i), ev.Index(i)) == false {
+				error = true
 				break
 			}
 		}
-		if found == false {
-			error = true
-		}
 	}
+
 	if error {
 		t.Errorf("\tCollection was expected to only contain")
 		t.Errorf("\t\t%v\n", expected)
