@@ -50,8 +50,15 @@ func AssertCollectionEquality(t *testing.T, expected interface{}, actual interfa
 }
 
 func isEqual(actual, expected reflect.Value) bool {
-	a := actual.Interface().(equaler)
-	e := expected.Interface().(equaler)
+	a := actual.Interface()
+	e := expected.Interface()
 
-	return a.Equal(e)
+	aeq, aok := a.(equaler)
+	eeq, eok := e.(equaler)
+
+	if aok && eok {
+		return aeq.Equal(eeq)
+	}
+
+	return reflect.DeepEqual(a, e)
 }
