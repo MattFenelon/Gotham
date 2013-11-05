@@ -15,6 +15,6 @@ func (f *InMemoryFileStore) Store(key string, filepaths []string) error {
 	return nil
 }
 
-func (f *InMemoryFileStore) GetAll(key string) []string {
+func (f *InMemoryFileStore) Get(key string) []string {
 	return f.stored[key]
 }

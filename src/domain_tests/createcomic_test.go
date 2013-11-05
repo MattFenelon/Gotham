@@ -23,7 +23,7 @@ func TestCreateComic(t *testing.T) {
 	AssertEquality(t, expected, eventStorer.GetAllEvents())
 
 	t.Log("\tIt should persist the page images")
-	AssertCollectionEquality(t, expectedPages, fileStorer.GetAll(id.String()))
+	AssertCollectionEquality(t, expectedPages, fileStorer.Get(id.String()))
 }
 
 func TestCreateMultipleComics(t *testing.T) {
@@ -47,8 +47,8 @@ func TestCreateMultipleComics(t *testing.T) {
 	AssertCollectionEquality(t, expected, eventStorer.GetAllEvents())
 
 	t.Log("\tIt should persist the page images for each comic")
-	AssertCollectionEquality(t, expectedPages1, fileStorer.GetAll(id1.String()))
-	AssertCollectionEquality(t, expectedPages2, fileStorer.GetAll(id2.String()))
+	AssertCollectionEquality(t, expectedPages1, fileStorer.Get(id1.String()))
+	AssertCollectionEquality(t, expectedPages2, fileStorer.Get(id2.String()))
 }
 
 func TestCreateComicTitleTrimming(t *testing.T) {
