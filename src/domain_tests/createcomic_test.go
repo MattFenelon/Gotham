@@ -18,7 +18,7 @@ func TestCreateComic(t *testing.T) {
 	comics.AddComic(id, "Prophet", "Prophet 31")
 
 	t.Log("\tIt should raise a comic added event")
-	AssertEquality(t, expected, eventStorer)
+	AssertEquality(t, expected, eventStorer.GetAllEvents())
 }
 
 func TestCreateMultipleComics(t *testing.T) {
@@ -36,7 +36,7 @@ func TestCreateMultipleComics(t *testing.T) {
 	comics.AddComic(id2, "Batman", "Batman 1")
 
 	t.Log("\tIt should raise a comic added event for all of the added comics")
-	AssertCollectionEquality(t, expected, eventStorer)
+	AssertCollectionEquality(t, expected, eventStorer.GetAllEvents())
 }
 
 func TestCreateComicTitleTrimming(t *testing.T) {
@@ -50,7 +50,7 @@ func TestCreateComicTitleTrimming(t *testing.T) {
 	comics.AddComic(id, "\t\n\v\f\r\u0085\u00A0Series With Whitespace\t\n\v\f\r\u0085\u00A0", "\t\n\v\f\r\u0085\u00A0Title With Whitespace\t\n\v\f\r\u0085\u00A0")
 
 	t.Log("\tIt should remove the extra whitespace")
-	AssertEquality(t, expected, eventStorer)
+	AssertEquality(t, expected, eventStorer.GetAllEvents())
 }
 
 func TestCreateComicNoBookTitle(t *testing.T) {
@@ -72,7 +72,7 @@ func TestCreateComicNoBookTitle(t *testing.T) {
 	}
 
 	t.Log("\tIt should not add the comics")
-	AssertCollectionIsEmpty(t, eventStorer)
+	AssertCollectionIsEmpty(t, eventStorer.GetAllEvents())
 }
 
 func TestCreateComicNoSeriesTitle(t *testing.T) {
@@ -94,7 +94,7 @@ func TestCreateComicNoSeriesTitle(t *testing.T) {
 	}
 
 	t.Log("\tIt should not add the comics")
-	AssertCollectionIsEmpty(t, eventStorer)
+	AssertCollectionIsEmpty(t, eventStorer.GetAllEvents())
 }
 
 // TODO: Test adding multiple comics with same id.
