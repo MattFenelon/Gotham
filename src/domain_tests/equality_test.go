@@ -12,6 +12,7 @@ type equalityTest struct {
 	differentTo map[string]interface{}
 }
 
+// testType is used for type comparison of the object-under-test with a different type.
 type testType struct {
 }
 
@@ -30,19 +31,25 @@ func buildTests() []equalityTest {
 			"Another type":    testType{}}})
 
 	id := uuid.NewRandom()
-	sourceComicAdded := NewComicAdded(id, "SeriesTitle", "Title")
+	pages := []string{"0.jpg", "1.jpg"}
+	sourceComicAdded := NewComicAdded(id, "SeriesTitle", "Title", pages)
 	tests = append(tests, equalityTest{
 		source: sourceComicAdded,
 		sameAs: map[string]interface{}{
 			"Same variable":      sourceComicAdded,
 			"Deferenced pointer": *sourceComicAdded,
-			"Same field values":  NewComicAdded(id, "SeriesTitle", "Title")},
+			"Same field values":  NewComicAdded(id, "SeriesTitle", "Title", []string{"0.jpg", "1.jpg"})},
 		differentTo: map[string]interface{}{
-			"Different Id":          NewComicAdded(uuid.NewRandom(), "SeriesTitle", "Title"),
-			"Different SeriesTitle": NewComicAdded(id, "Different Series Title", "Title"),
-			"Different Title":       NewComicAdded(id, "SeriesTitle", "Different Book Title"),
-			"Nil":                   nil,
-			"Another type":          testType{}}})
+			"Different Id":           NewComicAdded(uuid.NewRandom(), "SeriesTitle", "Title", pages),
+			"Different SeriesTitle":  NewComicAdded(id, "Different Series Title", "Title", pages),
+			"Different Title":        NewComicAdded(id, "SeriesTitle", "Different Book Title", pages),
+			"Different Pages":        NewComicAdded(id, "SeriesTitle", "Title", []string{"2.jpg", "3.jpg"}),
+			"Different Pages order":  NewComicAdded(id, "SeriesTitle", "Title", []string{"1.jpg", "0.jpg"}),
+			"No pages":               NewComicAdded(id, "SeriesTitle", "Title", []string{}),
+			"Different Pages (more)": NewComicAdded(id, "SeriesTitle", "Title", []string{"0.jpg", "1.jpg", "2.jpg"}),
+			"Different Pages (less)": NewComicAdded(id, "SeriesTitle", "Title", []string{"0.jpg"}),
+			"Nil":          nil,
+			"Another type": testType{}}})
 
 	return tests
 }

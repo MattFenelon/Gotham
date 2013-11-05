@@ -5,7 +5,7 @@ import (
 	"domain"
 )
 
-func addComic(newId uuid.UUID, seriesTitle, bookTitle string, store EventStorer) error {
+func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, eventstorer EventStorer, filestorer FileStorer) error {
 	series, err := domain.NewSeriesTitle(seriesTitle)
 	if err != nil {
 		return err
@@ -16,8 +16,9 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, store EventStorer)
 		return err
 	}
 
-	event := domain.NewComicAdded(domain.NewComicId(newId), series, title)
-	store.AddEvent(event) // TODO: Deal with errors from the store
+	event := domain.NewComicAdded(domain.NewComicId(newId), series, title, pages)
+	eventstorer.AddEvent(event)                // TODO: Deal with errors from the eventstorer
+	filestorer.Store(event.Id.String(), pages) // TODO: Deal with errors from the filestorer
 
 	return nil
 }

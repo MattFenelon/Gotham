@@ -5,9 +5,9 @@ import (
 	"domain"
 )
 
-func NewComicAdded(id uuid.UUID, seriesTitle, bookTitle string) *domain.ComicAdded {
+func NewComicAdded(id uuid.UUID, seriesTitle, bookTitle string, pages []string) *domain.ComicAdded {
 	series, _ := domain.NewSeriesTitle(seriesTitle)
 	book, _ := domain.NewBookTitle(bookTitle)
 	comicId := domain.NewComicId(id)
-	return domain.NewComicAdded(comicId, series, book)
+	return domain.NewComicAdded(comicId, series, book, pages)
 }
