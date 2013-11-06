@@ -2,6 +2,7 @@ package filestore
 
 import (
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -26,19 +27,28 @@ func (store *localFilestore) Store(key string, files map[string]string) error {
 	os.MkdirAll(keypath, os.ModeDir)
 	for dstfilename, srcpath := range files {
 		dstpath := filepath.Join(keypath, dstfilename)
-		copy(dstpath, srcpath)
+		log.Printf("copying from %v to %v\n", srcpath, dstpath)
+		if err := copy(dstpath, srcpath); err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
 func copy(dstpath, srcpath string) error {
-	src, _ := os.Open(srcpath)
+	src, err := os.Open(srcpath)
+	if err != nil {
+		return err
+	}
 	defer src.Close()
 
-	dst, _ := os.Create(dstpath)
+	dst, err := os.Create(dstpath)
+	if err != nil {
+		return err
+	}
 	defer dst.Close()
 
-	_, err := io.Copy(dst, src)
+	_, err = io.Copy(dst, src)
 	return err
 }

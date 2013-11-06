@@ -3,6 +3,7 @@ package domainservices
 import (
 	"code.google.com/p/go-uuid/uuid"
 	"domain"
+	"log"
 )
 
 func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages map[string]string, eventstorer EventStorer, filestorer FileStorer) error {
@@ -18,6 +19,9 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages map[string]s
 
 	pagenames := getPageFilenames(pages)
 	event := domain.NewComicAdded(domain.NewComicId(newId), series, title, pagenames)
+
+	log.Printf("Storing new comic book %v\n", event)
+
 	eventstorer.AddEvent(event)                // TODO: Deal with errors from the eventstorer
 	filestorer.Store(event.Id.String(), pages) // TODO: Deal with errors from the filestorer
 
