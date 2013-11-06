@@ -5,12 +5,12 @@ import (
 )
 
 type ComicDomain struct {
-	AddComic func(newId uuid.UUID, seriesTitle, bookTitle string, pages []string) error
+	AddComic func(newId uuid.UUID, seriesTitle, bookTitle string, pages map[string]string) error
 }
 
 func NewComicDomain(eventStorer EventStorer, fileStorer FileStorer) ComicDomain {
 	return ComicDomain{
-		AddComic: func(newId uuid.UUID, seriesTitle, bookTitle string, pages []string) error {
+		AddComic: func(newId uuid.UUID, seriesTitle, bookTitle string, pages map[string]string) error {
 			return addComic(newId, seriesTitle, bookTitle, pages, eventStorer, fileStorer)
 		}}
 }

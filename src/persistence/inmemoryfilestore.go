@@ -10,8 +10,14 @@ func NewInMemoryFileStore() *InMemoryFileStore {
 	}
 }
 
-func (f *InMemoryFileStore) Store(key string, filepaths []string) error {
-	f.stored[key] = filepaths
+func (f *InMemoryFileStore) Store(key string, files map[string]string) error {
+	// TODO: Check key and files for nil
+
+	names := make([]string, 0, len(files))
+	for key, _ := range files { // The source paths can be ignored because the inmemorystore doesn't do anything with the files.
+		names = append(names, key)
+	}
+	f.stored[key] = names
 	return nil
 }
 
