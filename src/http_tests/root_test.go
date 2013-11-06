@@ -2,17 +2,13 @@ package http_tests
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
-	"gotham/lib"
 	"io/ioutil"
 	"net/http"
-	"net/http/httptest"
-	"persistence"
 	"testing"
 )
 
 func TestGetRootResource(t *testing.T) {
-	exports := lib.Configure(persistence.NewInMemoryEventStore())
-	server := httptest.NewServer(exports.Handler)
+	server, _, _ := startTestableApi()
 	defer server.Close()
 
 	response, err := http.Get(server.URL)

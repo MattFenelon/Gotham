@@ -1,26 +1,43 @@
 package persistence
 
+import (
+	"io/ioutil"
+)
+
 type InMemoryFileStore struct {
-	stored map[string][]string
+	stored map[string]map[string][]byte
 }
 
 func NewInMemoryFileStore() *InMemoryFileStore {
 	return &InMemoryFileStore{
-		stored: make(map[string][]string),
+		stored: map[string]map[string][]byte{},
 	}
 }
 
-func (f *InMemoryFileStore) Store(key string, files map[string]string) error {
+func (store *InMemoryFileStore) Store(key string, files map[string]string) error {
 	// TODO: Check key and files for nil
 
-	names := make([]string, 0, len(files))
-	for key, _ := range files { // The source paths can be ignored because the inmemorystore doesn't do anything with the files.
-		names = append(names, key)
+	f := make(map[string][]byte, len(files))
+	for filename, path := range files {
+		contents, err := ioutil.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		f[filename] = contents
 	}
-	f.stored[key] = names
+	store.stored[key] = f
 	return nil
 }
 
 func (f *InMemoryFileStore) Get(key string) []string {
-	return f.stored[key]
+	files := f.stored[key]
+	names := make([]string, 0, len(files))
+	for filename, _ := range files {
+		names = append(names, filename)
+	}
+	return names
+}
+
+func (f *InMemoryFileStore) GetAll() map[string]map[string][]byte {
+	return f.stored
 }

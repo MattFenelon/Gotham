@@ -71,7 +71,7 @@ Content-Type: application/comics+json
 
 The comic resource can be used to add comics.
 
-Requests are formed as multipart/form-data. The first part is expected to be the metadata for the comic represented as application/json with the name "metadata". The subsequent parts are the page images for the comic and must have the name "page". The page images must be in the order by which they are to be displayed. The only page image format currently supported is image/jpeg.
+Requests are formed as multipart/form-data. The first part is expected to be the metadata for the comic represented as application/json with "metadata" as the field-name. The subsequent parts should be the page images for the comic, which must have a field-name of "page". The page images must be in the order by which they are to be displayed. The images are stored under the filename specified in the filename parameter of the part. The only page image format currently supported is image/jpeg.
 
 A comic must have at least 1 page image.
 
@@ -103,7 +103,7 @@ Content-Type: image/jpeg
 
 <Binary content goes here>
 --Any-ASCII-string
-Content-Disposition: form-data; name="page"
+Content-Disposition: form-data; name="page"; filename="0.jpg"
 Content-Type: image/jpeg
 
 <Binary content goes here>

@@ -2,11 +2,14 @@ package http_tests
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
 	"path/filepath"
+	"persistence"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -14,7 +17,7 @@ import (
 func TestAddBook(t *testing.T) {
 	t.Log("POST /books")
 
-	server, store := startTestableApi()
+	server, eventstore, filestore := startTestableApi()
 	defer server.Close()
 
 	metadata := `{
@@ -25,7 +28,8 @@ func TestAddBook(t *testing.T) {
 	var buffer bytes.Buffer
 	writer := multipart.NewWriter(&buffer)
 	writeMetadata(writer, metadata)
-	writeImageData(t, writer, "testdata\\Prophet 30 Cover Image.jpg")
+	image1 := writeImageData(t, writer, "testdata\\0.jpg")
+	image2 := writeImageData(t, writer, "testdata\\1.jpg")
 	writer.Close()
 
 	rsp, err := http.Post(server.URL+"/books", writer.FormDataContentType(), &buffer)
@@ -48,13 +52,24 @@ func TestAddBook(t *testing.T) {
 	}
 
 	t.Log("The comic should be persisted")
-	actualEvents := store.GetAllEvents()
+	actualEvents := eventstore.GetAllEvents()
 	if len(actualEvents) == 0 || actualEvents[0].Title != "Prophet 31" {
 		t.Errorf("\tExpected 1 items but contained %v", actualEvents)
 	}
 
-	t.Log("The comic pages should be persisted")
-	t.Error("\tExpected 1 items but contained 0")
+	t.Log("The comic pages should be persisted using the filenames specified in the form")
+	actualFiles := getAllFilenames(filestore)
+	expectedFiles := []string{"0.jpg", "1.jpg"}
+	if reflect.DeepEqual(actualFiles, expectedFiles) == false {
+		t.Errorf("\tExpected %v but contained %v", expectedFiles, actualFiles)
+	}
+
+	t.Log("The contents of the persisted comic pages should match the uploaded images")
+	actualContents := getAllFileContents(filestore)
+	expectedContents := [][]byte{image1, image2}
+	if reflect.DeepEqual(actualContents, expectedContents) == false {
+		t.Errorf("\tExpected %v but was %v", len(actualContents), len(expectedContents))
+	}
 }
 
 func writeMetadata(w *multipart.Writer, metadata string) {
@@ -65,9 +80,10 @@ func writeMetadata(w *multipart.Writer, metadata string) {
 	metadataPart.Write([]byte(metadata))
 }
 
-func writeImageData(t *testing.T, w *multipart.Writer, imagepath string) {
+func writeImageData(t *testing.T, w *multipart.Writer, imagepath string) []byte {
+	_, filename := filepath.Split(imagepath)
 	pageImageHeader := make(textproto.MIMEHeader)
-	pageImageHeader.Set("Content-Disposition", "form-data; name=\"page\"")
+	pageImageHeader.Set("Content-Disposition", fmt.Sprintf("form-data; name=\"page\"; filename=\"%v\"", filename))
 	pageImageHeader.Set("Content-Type", "image/jpeg")
 
 	abs, _ := filepath.Abs(imagepath)
@@ -78,6 +94,29 @@ func writeImageData(t *testing.T, w *multipart.Writer, imagepath string) {
 
 	imagePart, _ := w.CreatePart(pageImageHeader)
 	imagePart.Write(contents)
+	return contents
+}
+
+func getAllFilenames(filestore *persistence.InMemoryFileStore) []string {
+	files := []string{}
+	for _, comicFiles := range filestore.GetAll() {
+		for filename, _ := range comicFiles {
+			files = append(files, filename)
+		}
+	}
+
+	return files
+}
+
+func getAllFileContents(filestore *persistence.InMemoryFileStore) [][]byte {
+	files := [][]byte{}
+	for _, comicFiles := range filestore.GetAll() {
+		for _, contents := range comicFiles {
+			files = append(files, contents)
+		}
+	}
+
+	return files
 }
 
 type addBookRequest struct {
@@ -109,7 +148,7 @@ func TestAddInvalidBooks(t *testing.T) {
 				}
 			}()
 
-			server, store := startTestableApi()
+			server, eventstore, _ := startTestableApi()
 			defer server.Close()
 
 			t.Logf("POST /books with mediatype: \"%v\", body: \"%v\"", req.mediaType, req.body)
@@ -135,7 +174,7 @@ func TestAddInvalidBooks(t *testing.T) {
 			}
 
 			t.Log("The comic should not be persisted")
-			actualEvents := store.GetAllEvents()
+			actualEvents := eventstore.GetAllEvents()
 			if len(actualEvents) != 0 {
 				t.Errorf("\tExpected 0 items but contained %v", actualEvents)
 			}
@@ -148,7 +187,7 @@ func TestAddInvalidBooks(t *testing.T) {
 func TestGetBooks(t *testing.T) {
 	t.Log("GET /books")
 
-	server, _ := startTestableApi()
+	server, _, _ := startTestableApi()
 	defer server.Close()
 
 	rsp, err := http.Get(server.URL + "/books")
