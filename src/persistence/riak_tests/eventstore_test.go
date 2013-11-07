@@ -6,15 +6,12 @@ import (
 	"testing"
 )
 
-var riakCluster = []string{"127.0.0.1:8087"}
-var riakClientId = "AutomatedTestClient"
-
 func TestComicAdded(t *testing.T) {
 	t.Log("When adding a single comic")
 
 	seriesTitle, _ := domain.NewSeriesTitle("Prophet")
 	title, _ := domain.NewBookTitle("Prophet 31")
-	expectedEvent := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title)
+	expectedEvent := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title, []string{"0.jpg", "1.jpg"})
 
 	StoreEvent(t, expectedEvent)
 	defer DeleteEvent(t, expectedEvent.Id.String())
@@ -32,13 +29,13 @@ func TestAddingMultipleEvents(t *testing.T) {
 
 	seriesTitle, _ := domain.NewSeriesTitle("Spider-men")
 	title, _ := domain.NewBookTitle("Spider-men 1")
-	expectedEvent1 := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title)
+	expectedEvent1 := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title, []string{"1.jpg", "2.jpg"})
 	StoreEvent(t, expectedEvent1)
 	defer DeleteEvent(t, expectedEvent1.Id.String())
 
 	seriesTitle, _ = domain.NewSeriesTitle("Guardians of the Galaxy")
 	title, _ = domain.NewBookTitle("Guardians of the Galaxy 11")
-	expectedEvent2 := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title)
+	expectedEvent2 := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title, []string{"0.jpg"})
 	StoreEvent(t, expectedEvent2)
 	defer DeleteEvent(t, expectedEvent2.Id.String())
 
