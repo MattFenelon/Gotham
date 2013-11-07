@@ -4,6 +4,7 @@ import (
 	"code.google.com/p/go-uuid/uuid"
 	"domainservices"
 	"encoding/json"
+	"log"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -111,9 +112,11 @@ func getMetadata(form *multipart.Form) (metadata *addBookMetadata, errstatuscode
 
 func getPageFiles(form *multipart.Form) map[string]string {
 	fileparts := form.File["page"]
+	log.Printf("Received form contains %v page images", len(fileparts))
 	filenames := make(map[string]string, len(fileparts))
 
 	for _, p := range fileparts {
+		log.Printf("Received page image %v", p.Filename)
 		filenames[p.Filename] = getFilename(p) // TODO: Error on multiple parts with the same filename
 	}
 
