@@ -111,7 +111,7 @@ func getMetadata(form *multipart.Form) (metadata *addBookMetadata, errstatuscode
 
 func getPageFiles(form *multipart.Form) map[string]string {
 	fileparts := form.File["page"]
-	filenames := make(map[string]string, cap(fileparts))
+	filenames := make(map[string]string, len(fileparts))
 
 	for _, p := range fileparts {
 		filenames[p.Filename] = getFilename(p) // TODO: Error on multiple parts with the same filename
