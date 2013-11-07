@@ -6,11 +6,12 @@ import (
 	"persistence"
 )
 
-func startTestableApi() (server *httptest.Server, eventstore *persistence.InMemoryEventStore, filestore *persistence.InMemoryFileStore) {
-	eventstore = persistence.NewInMemoryEventStore()
-	filestore = persistence.NewInMemoryFileStore()
-	exports := lib.Configure(eventstore, filestore)
+func startTestableApi() (server *httptest.Server, es *persistence.InMemoryEventStore, fs *persistence.InMemoryFileStore, vs *persistence.InMemoryViewStore) {
+	es = persistence.NewInMemoryEventStore()
+	fs = persistence.NewInMemoryFileStore()
+	vs = persistence.NewInMemoryViewStore()
+	exports := lib.Configure(es, fs, vs)
 	server = httptest.NewServer(exports.Handler)
 
-	return server, eventstore, filestore
+	return server, es, fs, vs
 }

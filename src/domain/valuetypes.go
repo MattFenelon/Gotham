@@ -32,6 +32,10 @@ func NewSeriesTitle(value string) (seriesTitle, error) {
 	return "", errors.New("Series title cannot be empty")
 }
 
+func (s seriesTitle) String() string {
+	return string(s)
+}
+
 // A bookTitle represents the title of a comic book.
 // Book titles cannot be empty nor can they be padded with whitespace.
 type bookTitle trimmedString
@@ -42,6 +46,10 @@ func NewBookTitle(value string) (bookTitle, error) {
 	}
 
 	return "", errors.New("Book title cannot be empty")
+}
+
+func (b bookTitle) String() string {
+	return string(b)
 }
 
 // A comicId represents the unique identity of a comic.

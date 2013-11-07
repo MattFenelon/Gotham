@@ -1,52 +1,64 @@
 package http_tests
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
+	"code.google.com/p/go-uuid/uuid"
+	"domainservices"
 	"io/ioutil"
 	"net/http"
 	"testing"
 )
 
 func TestGetRootResource(t *testing.T) {
-	server, _, _ := startTestableApi()
+	t.Log("When the root resource contains comics")
+
+	server, eventstore, filestore, viewstore := startTestableApi()
 	defer server.Close()
+
+	comics := domainservices.NewComicDomain(eventstore, filestore, viewstore)
+	fataleId := uuid.NewRandom()
+	walkingDeadId := uuid.NewRandom()
+	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
+	comics.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
+
+	t.Log("\tGET /")
 
 	response, err := http.Get(server.URL)
 	if err != nil {
 		t.Fatalf("Error on HTTP GET to %v: %v", server.URL, err)
 	}
 
-	Convey("GET /", t, func() {
-		Convey("The response should be 200 OK", func() {
-			So(response.StatusCode, ShouldEqual, 200)
-		})
+	defer response.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(response.Body)
+	actualBody := string(bodyBytes)
 
-		Convey("The Content-Type should be application/json", func() {
-			So(response.Header.Get("Content-Type"), ShouldEqual, "application/json")
-		})
+	t.Log("\tThe response should be 200 OK")
+	if response.StatusCode != 200 {
+		t.Error("\tExpected 200 but was", response.StatusCode)
+	}
 
-		Convey("The response body should include all comics in JSON format", func() {
-			defer response.Body.Close()
-			bodyBytes, _ := ioutil.ReadAll(response.Body)
-			body := string(bodyBytes)
-			So(body, ShouldEqual, `{
-	"seriesset": [
+	t.Log("\tThe Content-Type should be application/json")
+	if response.Header.Get("Content-Type") != "application/json" {
+		t.Error("\tExpected application/json but was", response.Header.Get("Content-Type"))
+	}
+
+	t.Log("\tThe response body should include all comics in JSON format")
+	expectedBody := `{
+	"series": [
 		{
-			"title": "Prophet",
+			"title": "Fatale",
 			"links": {
-				"via": {"href": "/series/1"},
-				"{docHost}/rel/seriesimage": {"href": "/images/1.jpg"}
-			},
+				"seriesimage": {"href": "http://gotham/pages/` + fataleId.String() + `/0.jpg"}
+			}
 		},
 		{
-			"title": "Jupiter's Legacy",
+			"title": "The Walking Dead",
 			"links": {
-				"via": {"href": "/series/2"},
-				"{docHost}/rel/seriesimage": {"href": "/images/2.jpg"}
-			},
+				"seriesimage": {"href": "http://gotham/pages/` + walkingDeadId.String() + `/0.jpg"}
+			}
 		}
 	]
-}`)
-		})
-	})
+}`
+	if actualBody != expectedBody {
+		t.Errorf("\tExpected %v but was %v", expectedBody, actualBody)
+	}
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func Test404(t *testing.T) {
-	server, _, _ := startTestableApi()
+	server, _, _, _ := startTestableApi()
 	defer server.Close()
 
 	response, err := http.Get(server.URL + "/rubbish")

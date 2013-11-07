@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pageSources []string, eventstorer EventStorer, filestorer FileStorer) error {
+func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pageSources []string, eventstorer EventStorer, filestorer FileStorer, vs frontPageViewStore) error {
 	series, err := domain.NewSeriesTitle(seriesTitle)
 	if err != nil {
 		return err
@@ -23,6 +23,7 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 
 	eventstorer.AddEvent(event)                             // TODO: Deal with errors from the eventstorer
 	filestorer.Store(event.Id.String(), pages, pageSources) // TODO: Deal with errors from the filestorer
+	saveFrontPage(vs, event)
 
 	return nil
 }
@@ -33,4 +34,23 @@ func getPageFilenames(pages map[string]string) []string {
 		names = append(names, key)
 	}
 	return names
+}
+
+func saveFrontPage(vs frontPageViewStore, event *domain.ComicAdded) {
+	frontPage := vs.Get()
+
+	for _, s := range frontPage.Series {
+		if s.Title == event.SeriesTitle.String() {
+			return
+		}
+	}
+
+	newseries := []FrontPageViewSeries{
+		FrontPageViewSeries{
+			Title: event.SeriesTitle.String(),
+		},
+	}
+
+	frontPage.Series = append(newseries, frontPage.Series...)
+	vs.Store(&frontPage)
 }

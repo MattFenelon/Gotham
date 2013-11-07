@@ -24,13 +24,13 @@ Content-Type: application/json
 		{
 			"title": "Prophet",
 			"links": {
-				"seriesimage": {"href": "http://gotham/images/0.jpg"}
+				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"}
 			},
 		},
 		{
 			"title": "Jupiter's Legacy",
 			"links": {
-				"seriesimage": {"href": "http://gotham/images/0.jpg"}
+				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"}
 			},
 		}
 	]

@@ -21,3 +21,24 @@ type EventStorer interface {
 type FileStorer interface {
 	Store(key string, filenames, sourcePaths []string) error
 }
+
+// ViewGetStorer is the interface that groups the Get and Store methods.
+type ViewGetStorer interface {
+	ViewGetter
+	ViewStorer
+}
+
+// ViewStorer is the interface that wraps the Store method.
+//
+// Store takes a view with a specific key and creates or overwrites the view at that key.
+type ViewStorer interface {
+	Store(key string, view interface{})
+}
+
+// ViewGetter is the interface that wraps the Get method.
+//
+// Get retrieves a view that was previously stored at the specified key.
+// If no view exists at the key, nil is returned.
+type ViewGetter interface {
+	Get(key string) interface{}
+}

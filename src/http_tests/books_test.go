@@ -17,7 +17,7 @@ import (
 func TestAddBook(t *testing.T) {
 	t.Log("POST /books")
 
-	server, eventstore, filestore := startTestableApi()
+	server, eventstore, filestore, _ := startTestableApi()
 	defer server.Close()
 
 	metadata := `{
@@ -146,7 +146,7 @@ func TestAddInvalidBooks(t *testing.T) {
 				}
 			}()
 
-			server, eventstore, _ := startTestableApi()
+			server, eventstore, _, _ := startTestableApi()
 			defer server.Close()
 
 			t.Logf("POST /books with mediatype: \"%v\", body: \"%v\"", req.mediaType, req.body)
@@ -185,7 +185,7 @@ func TestAddInvalidBooks(t *testing.T) {
 func TestGetBooks(t *testing.T) {
 	t.Log("GET /books")
 
-	server, _, _ := startTestableApi()
+	server, _, _, _ := startTestableApi()
 	defer server.Close()
 
 	rsp, err := http.Get(server.URL + "/books")

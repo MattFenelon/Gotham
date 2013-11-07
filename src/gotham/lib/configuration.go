@@ -10,11 +10,11 @@ type Exports struct {
 	Handler http.Handler
 }
 
-func Configure(eventstore domainservices.EventStorer, filestore domainservices.FileStorer) (exports Exports) {
+func Configure(eventstore domainservices.EventStorer, filestore domainservices.FileStorer, viewstore domainservices.ViewGetStorer) (exports Exports) {
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/", ServeHttp)
 	serveMux.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
-		handlers.BooksHandler(w, r, eventstore, filestore)
+		handlers.BooksHandler(w, r, eventstore, filestore, viewstore)
 	})
 
 	exports = Exports{Handler: serveMux}

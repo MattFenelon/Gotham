@@ -31,7 +31,7 @@ func (f *addBookForm) RemoveAll() error {
 	return nil
 }
 
-func BooksHandler(w http.ResponseWriter, r *http.Request, eventstorer domainservices.EventStorer, filestorer domainservices.FileStorer) {
+func BooksHandler(w http.ResponseWriter, r *http.Request, eventstorer domainservices.EventStorer, filestorer domainservices.FileStorer, viewstore domainservices.ViewGetStorer) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -44,7 +44,7 @@ func BooksHandler(w http.ResponseWriter, r *http.Request, eventstorer domainserv
 		return
 	}
 
-	comics := domainservices.NewComicDomain(eventstorer, filestorer)
+	comics := domainservices.NewComicDomain(eventstorer, filestorer, viewstore)
 	if err := comics.AddComic(uuid.NewRandom(), form.metadata.SeriesTitle, form.metadata.Title, form.pageFilenames, form.pageSources); err != nil { // TODO: Raise different types of errors, i.e. database
 		w.WriteHeader(http.StatusBadRequest)
 		return

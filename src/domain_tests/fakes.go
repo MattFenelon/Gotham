@@ -31,3 +31,14 @@ func (store *FakeFileStore) Store(key string, filenames []string, sourcePaths []
 func (store *FakeFileStore) Get(key string) []string {
 	return store.stored[key]
 }
+
+// FakeViewStore
+type FakeViewStore struct {
+	*persistence.InMemoryViewStore
+}
+
+func NewFakeViewStore() *FakeViewStore {
+	return &FakeViewStore{
+		InMemoryViewStore: persistence.NewInMemoryViewStore(),
+	}
+}

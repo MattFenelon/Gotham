@@ -15,19 +15,17 @@ func (handler *RootHandler) Get() (result *http.HttpResponse) {
 	result = &http.HttpResponse{
 		ContentType: "application/json",
 		Result: `{
-	"seriesset": [
+	"series": [
 		{
 			"title": "Prophet",
 			"links": {
-				"via": {"href": "/series/1"},
-				"{docHost}/rel/seriesimage": {"href": "/images/1.jpg"}
+				"seriesimage": {"href": "http://gotham/images/0.jpg"}
 			},
 		},
 		{
 			"title": "Jupiter's Legacy",
 			"links": {
-				"via": {"href": "/series/2"},
-				"{docHost}/rel/seriesimage": {"href": "/images/2.jpg"}
+				"seriesimage": {"href": "http://gotham/images/0.jpg"}
 			},
 		}
 	]
