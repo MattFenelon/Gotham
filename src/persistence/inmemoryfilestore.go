@@ -5,39 +5,40 @@ import (
 )
 
 type InMemoryFileStore struct {
-	stored map[string]map[string][]byte
+	filenames map[string][]string
+	contents  map[string][][]byte
 }
 
 func NewInMemoryFileStore() *InMemoryFileStore {
 	return &InMemoryFileStore{
-		stored: map[string]map[string][]byte{},
+		filenames: map[string][]string{},
+		contents:  map[string][][]byte{},
 	}
 }
 
-func (store *InMemoryFileStore) Store(key string, files map[string]string) error {
+func (store *InMemoryFileStore) Store(key string, filenames, sourcePaths []string) error {
 	// TODO: Check key and files for nil
+	// TODO: Check that filenames and sourcepaths have the same length
 
-	f := make(map[string][]byte, len(files))
-	for filename, path := range files {
-		contents, err := ioutil.ReadFile(path)
+	contents := make([][]byte, 0, len(sourcePaths))
+	for _, srcPath := range sourcePaths {
+		bytes, err := ioutil.ReadFile(srcPath)
 		if err != nil {
 			return err
 		}
-		f[filename] = contents
+		contents = append(contents, bytes)
 	}
-	store.stored[key] = f
+
+	store.filenames[key] = filenames
+	store.contents[key] = contents
+
 	return nil
 }
 
 func (f *InMemoryFileStore) Get(key string) []string {
-	files := f.stored[key]
-	names := make([]string, 0, len(files))
-	for filename, _ := range files {
-		names = append(names, filename)
-	}
-	return names
+	return f.filenames[key]
 }
 
-func (f *InMemoryFileStore) GetAll() map[string]map[string][]byte {
-	return f.stored
+func (f *InMemoryFileStore) GetAll() (files map[string][]string, contents map[string][][]byte) {
+	return f.filenames, f.contents
 }

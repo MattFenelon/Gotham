@@ -21,12 +21,12 @@ func NewLocalFileStore(path string) *localFilestore {
 	}
 }
 
-func (store *localFilestore) Store(key string, files map[string]string) error {
+func (store *localFilestore) Store(key string, filenames, sourcePaths []string) error {
 	keypath := filepath.Join(store.path, key)
 
 	os.MkdirAll(keypath, os.ModeDir)
-	for dstfilename, srcpath := range files {
-		dstpath := filepath.Join(keypath, dstfilename)
+	for i, srcpath := range sourcePaths {
+		dstpath := filepath.Join(keypath, filenames[i])
 		log.Printf("copying from %v to %v\n", srcpath, dstpath)
 		if err := copy(dstpath, srcpath); err != nil {
 			return err

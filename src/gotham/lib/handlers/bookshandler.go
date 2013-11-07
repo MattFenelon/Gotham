@@ -18,9 +18,10 @@ type addBookMetadata struct {
 }
 
 type addBookForm struct {
-	metadata *addBookMetadata
-	pages    map[string]string
-	form     *multipart.Form
+	metadata      *addBookMetadata
+	pageFilenames []string
+	pageSources   []string
+	form          *multipart.Form
 }
 
 func (f *addBookForm) RemoveAll() error {
@@ -44,7 +45,7 @@ func BooksHandler(w http.ResponseWriter, r *http.Request, eventstorer domainserv
 	}
 
 	comics := domainservices.NewComicDomain(eventstorer, filestorer)
-	if err := comics.AddComic(uuid.NewRandom(), form.metadata.SeriesTitle, form.metadata.Title, form.pages); err != nil { // TODO: Raise different types of errors, i.e. database
+	if err := comics.AddComic(uuid.NewRandom(), form.metadata.SeriesTitle, form.metadata.Title, form.pageFilenames, form.pageSources); err != nil { // TODO: Raise different types of errors, i.e. database
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -77,7 +78,7 @@ func readForm(r *http.Request) (result *addBookForm, errstatuscode int) {
 		return result, errstatuscode
 	}
 
-	result.pages = getPageFiles(result.form)
+	result.pageFilenames, result.pageSources = getPageFiles(result.form)
 
 	return result, 0
 }
@@ -110,17 +111,19 @@ func getMetadata(form *multipart.Form) (metadata *addBookMetadata, errstatuscode
 	return metadata, 0
 }
 
-func getPageFiles(form *multipart.Form) map[string]string {
+func getPageFiles(form *multipart.Form) (filenames, sources []string) {
 	fileparts := form.File["page"]
 	log.Printf("Received form contains %v page images", len(fileparts))
-	filenames := make(map[string]string, len(fileparts))
+	filenames = make([]string, 0, len(fileparts))
+	sources = make([]string, 0, len(fileparts))
 
 	for _, p := range fileparts {
 		log.Printf("Received page image %v", p.Filename)
-		filenames[p.Filename] = getFilename(p) // TODO: Error on multiple parts with the same filename
+		filenames = append(filenames, p.Filename) // TODO: Error on multiple parts with the same filename
+		sources = append(sources, getFilename(p))
 	}
 
-	return filenames
+	return filenames, sources
 }
 
 func getFilename(file *multipart.FileHeader) string {

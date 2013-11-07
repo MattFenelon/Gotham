@@ -51,7 +51,7 @@ func TestAddBook(t *testing.T) {
 		t.Errorf("\tExpected \"\" but was %v", body)
 	}
 
-	t.Log("The comic should be persisted")
+	t.Log("The comic data should be persisted")
 	actualEvents := eventstore.GetAllEvents()
 	if len(actualEvents) == 0 || actualEvents[0].Title != "Prophet 31" {
 		t.Errorf("\tExpected 1 items but contained %v", actualEvents)
@@ -98,22 +98,20 @@ func writeImageData(t *testing.T, w *multipart.Writer, imagepath string) []byte 
 }
 
 func getAllFilenames(filestore *persistence.InMemoryFileStore) []string {
+	keyedFilenames, _ := filestore.GetAll()
 	files := []string{}
-	for _, comicFiles := range filestore.GetAll() {
-		for filename, _ := range comicFiles {
-			files = append(files, filename)
-		}
+	for _, filenames := range keyedFilenames {
+		files = append(files, filenames...)
 	}
 
 	return files
 }
 
 func getAllFileContents(filestore *persistence.InMemoryFileStore) [][]byte {
+	_, keyedContents := filestore.GetAll()
 	files := [][]byte{}
-	for _, comicFiles := range filestore.GetAll() {
-		for _, contents := range comicFiles {
-			files = append(files, contents)
-		}
+	for _, contents := range keyedContents {
+		files = append(files, contents...)
 	}
 
 	return files
@@ -173,7 +171,7 @@ func TestAddInvalidBooks(t *testing.T) {
 				t.Errorf("\tExpected \"\" but was %v", body)
 			}
 
-			t.Log("The comic should not be persisted")
+			t.Log("The comic data should not be persisted")
 			actualEvents := eventstore.GetAllEvents()
 			if len(actualEvents) != 0 {
 				t.Errorf("\tExpected 0 items but contained %v", actualEvents)
