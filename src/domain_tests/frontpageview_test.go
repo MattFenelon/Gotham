@@ -8,22 +8,35 @@ import (
 )
 
 func TestGetFrontpageViewWithASingleComic(t *testing.T) {
-	t.Log("When a single comic is added")
+	t.Log("When a single comic is added with multiple pages")
 
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
 	d := domainservices.NewComicDomain(es, fs, vs)
-	d.AddComic(uuid.NewRandom(), "The Walking Dead", "The Walking Dead 115", []string{}, []string{})
+	id := uuid.NewRandom()
+	d.AddComic(id, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"source//path//0.jpg", "source//path//1.jpg"})
 
 	actual := d.GetFrontPageView()
-	expected := &domainservices.FrontPageView{
-		Series: []domainservices.FrontPageViewSeries{domainservices.FrontPageViewSeries{Title: "The Walking Dead"}},
+
+	t.Log("The front page should only list the added comic")
+	if len(actual.Series) != 1 {
+		t.Errorf("\tExpected length of %v but was %v", 1, len(actual.Series))
 	}
 
-	t.Log("The front page view should list the comic's series")
-	if reflect.DeepEqual(actual, expected) == false {
-		t.Errorf("Expected %+v but was %+v", expected, actual)
+	t.Log("The front page should list the comic using its series' title")
+	if actual.Series[0].Title != "The Walking Dead" {
+		t.Errorf("\tExpected %v but was %v", "The Walking Dead", actual.Series[0].Title)
+	}
+
+	t.Log("The front page should use the comic's first page for the series image")
+	if actual.Series[0].ImageFilename != "0.jpg" {
+		t.Errorf("\tExpected %v but was %v", "0.jpg", actual.Series[0].ImageFilename)
+	}
+
+	t.Log("The front page should use the comic's id as the image key")
+	if actual.Series[0].ImageKey != id.String() {
+		t.Errorf("\tExpected %v but was %v", id.String(), actual.Series[0].ImageKey)
 	}
 }
 
@@ -34,14 +47,16 @@ func TestGetFrontpageViewWithMultipleSeries(t *testing.T) {
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
 	d := domainservices.NewComicDomain(es, fs, vs)
-	d.AddComic(uuid.NewRandom(), "The Walking Dead", "The Walking Dead 115", []string{}, []string{})
-	d.AddComic(uuid.NewRandom(), "Warrior", "Warrior 1", []string{}, []string{})
+	walkingDeadId := uuid.NewRandom()
+	warriorId := uuid.NewRandom()
+	d.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg"}, []string{"source//path//0.jpg"})
+	d.AddComic(warriorId, "Warrior", "Warrior 1", []string{"0.jpg"}, []string{"source//path//0.jpg"})
 
 	actual := d.GetFrontPageView()
 	expected := &domainservices.FrontPageView{
 		Series: []domainservices.FrontPageViewSeries{
-			domainservices.FrontPageViewSeries{Title: "Warrior"},
-			domainservices.FrontPageViewSeries{Title: "The Walking Dead"},
+			domainservices.FrontPageViewSeries{Title: "Warrior", ImageKey: warriorId.String(), ImageFilename: "0.jpg"},
+			domainservices.FrontPageViewSeries{Title: "The Walking Dead", ImageKey: walkingDeadId.String(), ImageFilename: "0.jpg"},
 		},
 	}
 
@@ -58,19 +73,31 @@ func TestGetFrontpageViewWithMultipleComicsFromTheSameSeries(t *testing.T) {
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
 	d := domainservices.NewComicDomain(es, fs, vs)
-	d.AddComic(uuid.NewRandom(), "The Walking Dead", "The Walking Dead 115", []string{}, []string{})
-	d.AddComic(uuid.NewRandom(), "The Walking Dead", "The Walking Dead 114", []string{}, []string{})
+	firstId := uuid.NewRandom()
+	lastId := uuid.NewRandom()
+	d.AddComic(firstId, "The Walking Dead", "The Walking Dead 114", []string{"0.jpg"}, []string{"source//path//0.jpg"})
+	d.AddComic(lastId, "The Walking Dead", "The Walking Dead 115", []string{"1.jpg"}, []string{"source//path//1.jpg"})
 
 	actual := d.GetFrontPageView()
-	expected := &domainservices.FrontPageView{
-		Series: []domainservices.FrontPageViewSeries{
-			domainservices.FrontPageViewSeries{Title: "The Walking Dead"},
-		},
+
+	t.Log("The front page should only list the series once")
+	if len(actual.Series) != 1 {
+		t.Errorf("\tExpected length of %v but was %v", 1, len(actual.Series))
 	}
 
-	t.Log("The front page view should list the series once")
-	if reflect.DeepEqual(actual, expected) == false {
-		t.Errorf("Expected %+v but was %+v", expected, actual)
+	t.Log("The front page should list the comic using its series' title")
+	if actual.Series[0].Title != "The Walking Dead" {
+		t.Errorf("\tExpected %v but was %v", "The Walking Dead", actual.Series[0].Title)
+	}
+
+	t.Log("The front page should use the last added comic's first page for the series image")
+	if actual.Series[0].ImageFilename != "1.jpg" {
+		t.Errorf("\tExpected %v but was %v", "1.jpg", actual.Series[0].ImageFilename)
+	}
+
+	t.Log("The front page should use the last added comic's id as the image key")
+	if actual.Series[0].ImageKey != lastId.String() {
+		t.Errorf("\tExpected %v but was %v", lastId.String(), actual.Series[0].ImageKey)
 	}
 }
 

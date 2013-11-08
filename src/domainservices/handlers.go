@@ -3,6 +3,7 @@ package domainservices
 import (
 	"code.google.com/p/go-uuid/uuid"
 	"domain"
+	"errors"
 	"log"
 )
 
@@ -47,15 +48,20 @@ func getPageFilenames(pages map[string]string) []string {
 func saveFrontPage(vs frontPageViewStore, event *domain.ComicAdded) {
 	frontPage := vs.Get()
 
-	for _, s := range frontPage.Series {
+	for i, s := range frontPage.Series {
 		if s.Title == event.SeriesTitle.String() {
+			frontPage.Series[i].ImageKey = event.Id.String()
+			frontPage.Series[i].ImageFilename = event.Pages[0]
+			vs.Store(&frontPage)
 			return
 		}
 	}
 
 	newseries := []FrontPageViewSeries{
 		FrontPageViewSeries{
-			Title: event.SeriesTitle.String(),
+			Title:         event.SeriesTitle.String(),
+			ImageKey:      event.Id.String(),
+			ImageFilename: event.Pages[0],
 		},
 	}
 
