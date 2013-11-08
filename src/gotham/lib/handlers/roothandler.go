@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"domainservices"
 	"io"
 	"net/http"
 )
 
-func RootHandler(w http.ResponseWriter, r *http.Request) {
+func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicDomain) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
