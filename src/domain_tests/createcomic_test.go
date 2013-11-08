@@ -60,10 +60,10 @@ func TestCreateComicTitleTrimming(t *testing.T) {
 	comics := domainservices.NewComicDomain(es, fs, vs)
 
 	id := uuid.NewRandom()
-	expected := NewComicAdded(id, "Series With Whitespace", "Title With Whitespace", []string{})
+	expected := NewComicAdded(id, "Series With Whitespace", "Title With Whitespace", []string{"0.jpg"})
 
 	t.Log("When adding a new comic with whitespace in the book title and series title")
-	comics.AddComic(id, "\t\n\v\f\r\u0085\u00A0Series With Whitespace\t\n\v\f\r\u0085\u00A0", "\t\n\v\f\r\u0085\u00A0Title With Whitespace\t\n\v\f\r\u0085\u00A0", []string{}, []string{})
+	comics.AddComic(id, "\t\n\v\f\r\u0085\u00A0Series With Whitespace\t\n\v\f\r\u0085\u00A0", "\t\n\v\f\r\u0085\u00A0Title With Whitespace\t\n\v\f\r\u0085\u00A0", []string{"0.jpg"}, []string{"//source//0.jpg"})
 
 	t.Log("\tIt should remove the extra whitespace")
 	AssertEquality(t, expected, es.GetAllEvents())
@@ -111,6 +111,30 @@ func TestCreateComicNoSeriesTitle(t *testing.T) {
 	t.Log("\tFor the whitespace string it should return an error specifying that a series title is required")
 	if whitespaceErr == nil || whitespaceErr.Error() != "Series title cannot be empty" {
 		t.Errorf("\t\tError was %#v", emptyErr)
+	}
+
+	t.Log("\tIt should not add the comics")
+	AssertCollectionIsEmpty(t, es.GetAllEvents())
+}
+
+func TestCreateComicNoPages(t *testing.T) {
+	es := NewFakeEventStorer()
+	fs := NewFakeFileStore()
+	vs := NewFakeViewStore()
+	comics := domainservices.NewComicDomain(es, fs, vs)
+
+	t.Log("When the comic has no pages, or page sources")
+	pagesErr := comics.AddComic(uuid.NewRandom(), "Batman", "Batman 99", []string{}, []string{})
+	sourcesErr := comics.AddComic(uuid.NewRandom(), "Batman", "Batman 99", []string{"0.jpg"}, []string{})
+
+	t.Log("\tIt should return an error specifying that pages are required")
+	if pagesErr == nil || pagesErr.Error() != "At least one page is required" {
+		t.Errorf("\t\tError was %#v", pagesErr)
+	}
+
+	t.Log("\tIt should return an error specifying that page sources are required")
+	if sourcesErr == nil || sourcesErr.Error() != "At least one page source is required" {
+		t.Errorf("\t\tError was %#v", pagesErr)
 	}
 
 	t.Log("\tIt should not add the comics")

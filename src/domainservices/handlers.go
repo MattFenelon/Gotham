@@ -17,6 +17,14 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 		return err
 	}
 
+	if len(pages) == 0 {
+		return errors.New("At least one page is required")
+	}
+
+	if len(pageSources) == 0 {
+		return errors.New("At least one page source is required")
+	}
+
 	event := domain.NewComicAdded(domain.NewComicId(newId), series, title, pages)
 
 	log.Printf("Storing new comic book %v\n", event)
