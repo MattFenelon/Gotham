@@ -2,9 +2,17 @@ package handlers
 
 import (
 	"domainservices"
-	"io"
+	"encoding/json"
 	"net/http"
 )
+
+type rootView struct {
+	Series []rootViewSeries `json:"series"`
+}
+
+type rootViewSeries struct {
+	Title string `json:"title"`
+}
 
 func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicDomain) {
 	if r.URL.Path != "/" {
@@ -12,23 +20,20 @@ func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicD
 		return
 	}
 
-	result := `{
-	"series": [
-		{
-			"title": "Prophet",
-			"links": {
-				"seriesimage": {"href": "http://gotham/images/0.jpg"}
-			},
-		},
-		{
-			"title": "Jupiter's Legacy",
-			"links": {
-				"seriesimage": {"href": "http://gotham/images/0.jpg"}
-			},
-		}
-	]
-}`
-
 	w.Header().Add("Content-Type", "application/json")
-	io.WriteString(w, result)
+
+	src := d.GetFrontPageView()
+	dst := rootView{
+		Series: make([]rootViewSeries, 0, len(src.Series)),
+	}
+
+	for _, s := range src.Series {
+		series := rootViewSeries{
+			Title: s.Title,
+		}
+		dst.Series = append(dst.Series, series)
+	}
+
+	enc := json.NewEncoder(w)
+	enc.Encode(dst)
 }

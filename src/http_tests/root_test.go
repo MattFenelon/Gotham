@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestGetRootResource(t *testing.T) {
+func TestGetRoot(t *testing.T) {
 	t.Log("When the root resource contains comics")
 
 	server, eventstore, filestore, viewstore := startTestableApi()
@@ -42,22 +42,12 @@ func TestGetRootResource(t *testing.T) {
 	}
 
 	t.Log("\tThe response body should include all comics in JSON format")
-	expectedBody := `{
-	"series": [
-		{
-			"title": "Fatale",
-			"links": {
-				"seriesimage": {"href": "http://gotham/pages/` + fataleId.String() + `/0.jpg"}
-			}
-		},
-		{
-			"title": "The Walking Dead",
-			"links": {
-				"seriesimage": {"href": "http://gotham/pages/` + walkingDeadId.String() + `/0.jpg"}
-			}
-		}
-	]
-}`
+	expectedBody :=
+		`{"series":[` +
+			`{"title":"The Walking Dead"},` +
+			`{"title":"Fatale"}` +
+			`]}` + "\n"
+
 	if actualBody != expectedBody {
 		t.Errorf("\tExpected %v but was %v", expectedBody, actualBody)
 	}
