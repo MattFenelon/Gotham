@@ -11,7 +11,16 @@ type rootView struct {
 }
 
 type rootViewSeries struct {
-	Title string `json:"title"`
+	Title string              `json:"title"`
+	Links rootViewSeriesLinks `json:"links"`
+}
+
+type rootViewSeriesLinks struct {
+	SeriesImage linkView `json:"seriesimage"`
+}
+
+type linkView struct {
+	Href string `json:"href"`
 }
 
 func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicDomain) {
@@ -30,6 +39,9 @@ func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicD
 	for _, s := range src.Series {
 		series := rootViewSeries{
 			Title: s.Title,
+			Links: rootViewSeriesLinks{
+				SeriesImage: linkView{Href: "http://gotham/pages/" + s.ImageKey + "/" + s.ImageFilename},
+			},
 		}
 		dst.Series = append(dst.Series, series)
 	}
