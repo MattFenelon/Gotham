@@ -1,20 +1,17 @@
 package handlers
 
 import (
-	"gotham/lib/http"
+	"io"
+	"net/http"
 )
 
-type RootHandler struct {
-}
+func RootHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 
-func NewRootHandler() *RootHandler {
-	return &RootHandler{}
-}
-
-func (handler *RootHandler) Get() (result *http.HttpResponse) {
-	result = &http.HttpResponse{
-		ContentType: "application/json",
-		Result: `{
+	result := `{
 	"series": [
 		{
 			"title": "Prophet",
@@ -29,7 +26,8 @@ func (handler *RootHandler) Get() (result *http.HttpResponse) {
 			},
 		}
 	]
-}`}
+}`
 
-	return result
+	w.Header().Add("Content-Type", "application/json")
+	io.WriteString(w, result)
 }

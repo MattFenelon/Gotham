@@ -12,7 +12,7 @@ type Exports struct {
 
 func Configure(eventstore domainservices.EventStorer, filestore domainservices.FileStorer, viewstore domainservices.ViewGetStorer) (exports Exports) {
 	serveMux := http.NewServeMux()
-	serveMux.HandleFunc("/", ServeHttp)
+	serveMux.HandleFunc("/", handlers.RootHandler)
 	serveMux.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
 		handlers.BooksHandler(w, r, eventstore, filestore, viewstore)
 	})
