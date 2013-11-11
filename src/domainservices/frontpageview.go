@@ -5,7 +5,6 @@ type FrontPageView struct {
 }
 
 type FrontPageViewSeries struct {
-	Title         string
-	ImageKey      string
-	ImageFilename string
+	Title    string
+	ImageKey string
 }

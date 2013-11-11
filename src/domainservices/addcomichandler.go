@@ -37,21 +37,12 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 	return nil
 }
 
-func getPageFilenames(pages map[string]string) []string {
-	names := make([]string, 0, len(pages))
-	for key, _ := range pages {
-		names = append(names, key)
-	}
-	return names
-}
-
 func saveFrontPage(vs frontPageViewStore, event *domain.ComicAdded) {
 	frontPage := vs.Get()
 
 	for i, s := range frontPage.Series {
 		if s.Title == event.SeriesTitle.String() {
-			frontPage.Series[i].ImageKey = event.Id.String()
-			frontPage.Series[i].ImageFilename = event.Pages[0]
+			frontPage.Series[i].ImageKey = event.Id.String() + "/" + event.Pages[0]
 			vs.Store(&frontPage)
 			return
 		}
@@ -59,9 +50,8 @@ func saveFrontPage(vs frontPageViewStore, event *domain.ComicAdded) {
 
 	newseries := []FrontPageViewSeries{
 		FrontPageViewSeries{
-			Title:         event.SeriesTitle.String(),
-			ImageKey:      event.Id.String(),
-			ImageFilename: event.Pages[0],
+			Title:    event.SeriesTitle.String(),
+			ImageKey: event.Id.String() + "/" + event.Pages[0],
 		},
 	}
 

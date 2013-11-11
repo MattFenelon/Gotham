@@ -13,8 +13,7 @@ func (vs frontPageViewStore) Store(v *FrontPageView) {
 }
 
 func (vs frontPageViewStore) Get() FrontPageView {
-	fp := &FrontPageView{Series: []FrontPageViewSeries{}}
-	vs.vs.Get("frontpage", fp) // TODO: Check for errors
-
-	return *fp
+	fp := FrontPageView{Series: []FrontPageViewSeries{}}
+	vs.vs.Get("frontpage", &fp) // TODO: Check for errors
+	return fp
 }

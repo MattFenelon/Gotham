@@ -40,7 +40,7 @@ func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicD
 		series := rootViewSeries{
 			Title: s.Title,
 			Links: rootViewSeriesLinks{
-				SeriesImage: linkView{Href: "http://gotham/pages/" + s.ImageKey + "/" + s.ImageFilename},
+				SeriesImage: linkView{Href: "http://gotham/pages/" + s.ImageKey},
 			},
 		}
 		dst.Series = append(dst.Series, series)
