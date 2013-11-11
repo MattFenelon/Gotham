@@ -3,17 +3,19 @@ package lib
 import (
 	"log"
 	"net/http"
-	"persistence"
 	"persistence/filestore"
 	"persistence/riak"
 )
 
 func StartServer() {
+	cluster := []string{"127.0.0.1:8087"}
+	clientId := "gotham"
+
 	log.Println("Gotham is starting...")
 
-	eventstore := riak.NewRiakEventStore([]string{"127.0.0.1:8087"}, "httpapi")
+	eventstore := riak.NewRiakEventStore(cluster, clientId)
+	viewstore := riak.NewViewStore(cluster, clientId)
 	filestore := filestore.NewLocalFileStore("c:\\gothamfs")
-	viewstore := persistence.NewInMemoryViewStore()
 	exports := Configure(eventstore, filestore, viewstore)
 
 	err := http.ListenAndServe(":7001", exports.Handler)
