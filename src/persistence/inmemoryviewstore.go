@@ -1,7 +1,6 @@
 package persistence
 
 import (
-	"errors"
 	"reflect"
 )
 
@@ -15,14 +14,17 @@ func NewInMemoryViewStore() *InMemoryViewStore {
 	}
 }
 
-func (v *InMemoryViewStore) Get(key string, out interface{}) error {
-	view := v.views[key]
-	if view == nil {
-		return errors.New("View not found") // TODO: Replace with typed error
+func (vs *InMemoryViewStore) Get(key string, out interface{}) error {
+	v := vs.views[key]
+	if v == nil {
+		return nil
 	}
 
-	r := reflect.ValueOf(view)
-	reflect.ValueOf(out).Set(r)
+	// Reflection must be used to set the out parameter reflection is the only
+	// route open to us to change the value pointed to by out.
+	rv := reflect.ValueOf(v).Elem()
+	outref := reflect.ValueOf(out).Elem()
+	outref.Set(rv)
 
 	return nil
 }
