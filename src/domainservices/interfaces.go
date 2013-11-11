@@ -32,7 +32,7 @@ type ViewGetStorer interface {
 //
 // Store takes a view with a specific key and creates or overwrites the view at that key.
 type ViewStorer interface {
-	Store(key string, view interface{})
+	Store(key string, view interface{}) error
 }
 
 // ViewGetter is the interface that wraps the Get method.
@@ -40,5 +40,5 @@ type ViewStorer interface {
 // Get retrieves a view that was previously stored at the specified key.
 // If no view exists at the key, nil is returned.
 type ViewGetter interface {
-	Get(key string) interface{}
+	Get(key string, out interface{}) error
 }
