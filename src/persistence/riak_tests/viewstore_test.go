@@ -1,11 +1,8 @@
 package riak_tests
 
 import (
-	"bytes"
 	"code.google.com/p/go-uuid/uuid"
-	"encoding/gob"
-	"errors"
-	"github.com/MattFenelon/riakpbc"
+	"persistence/riak"
 	"reflect"
 	"testing"
 )
@@ -137,68 +134,14 @@ func TestGetNoObject(t *testing.T) {
 	}
 }
 
-var viewsBucket = "views"
-
 func Store(key string, in interface{}) error {
-	client := riakpbc.NewClient(riakCluster)
-	if err := client.Dial(); err != nil {
-		return err
-	}
-	defer client.Close()
-	if _, err := client.SetClientId(riakClientId); err != nil {
-		return err
-	}
-
-	var sendBuffer bytes.Buffer
-	enc := gob.NewEncoder(&sendBuffer)
-	if err := enc.Encode(in); err != nil {
-		return err
-	}
-	if _, err := client.StoreObject(viewsBucket, key, sendBuffer.Bytes()); err != nil {
-		return err
-	}
-
-	return nil
+	return riak.NewViewStore(riakCluster, riakClientId).Store(key, in)
 }
 
 func Get(key string, out interface{}) error {
-	client := riakpbc.NewClient(riakCluster)
-	if err := client.Dial(); err != nil {
-		return err
-	}
-	defer client.Close()
-	if _, err := client.SetClientId(riakClientId); err != nil {
-		return err
-	}
-
-	rsp, err := client.FetchObject(viewsBucket, key)
-	if err != nil && err == riakpbc.ErrObjectNotFound {
-		return errors.New("View not found") // TODO: Replace with typed error
-	} else if err != nil {
-		return err
-	}
-	reader := bytes.NewReader(rsp.GetContent()[0].GetValue())
-	dec := gob.NewDecoder(reader)
-
-	if err := dec.Decode(out); err != nil {
-		return err
-	}
-	return nil
+	return riak.NewViewStore(riakCluster, riakClientId).Get(key, out)
 }
 
 func Delete(key string) error {
-	client := riakpbc.NewClient(riakCluster)
-	if err := client.Dial(); err != nil {
-		return err
-	}
-	defer client.Close()
-	if _, err := client.SetClientId(riakClientId); err != nil {
-		return err
-	}
-
-	if _, err := client.DeleteObject(viewsBucket, key); err != nil {
-		return err
-	}
-
-	return nil
+	return riak.NewViewStore(riakCluster, riakClientId).Delete(key)
 }
