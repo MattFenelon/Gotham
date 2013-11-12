@@ -3,6 +3,7 @@ package handlers
 import (
 	"domainservices"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -40,7 +41,7 @@ func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicD
 		series := rootViewSeries{
 			Title: s.Title,
 			Links: rootViewSeriesLinks{
-				SeriesImage: linkView{Href: "http://gotham/pages/" + s.ImageKey},
+				SeriesImage: linkView{Href: fmt.Sprintf("http://%v/pages/%v", r.Host, s.ImageKey)},
 			},
 		}
 		dst.Series = append(dst.Series, series)
