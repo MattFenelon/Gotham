@@ -22,20 +22,16 @@ func Configure(eventstore domainservices.EventStorer, filestore FileStore, views
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/", makeDomainHandleFunc(handlers.RootHandler, domain))
 	serveMux.HandleFunc("/books", makeDomainHandleFunc(handlers.BooksHandler, domain))
-	serveMux.Handle("/pages/",
-		http.StripPrefix("/pages/",
-			http.FileServer(filestoreFilesystem(func(name string) (http.File, error) {
-				return filestore.Open(name)
-			}))))
+	serveMux.Handle("/pages/", makeFilestoreHandler("/pages/", filestore))
 
 	exports = Exports{Handler: serveMux}
 	return exports
 }
 
-func makeDomainHandleFunc(f domainHandlerFunc, domain domainservices.ComicDomain) http.HandlerFunc {
+func makeDomainHandleFunc(f domainHandleFunc, domain domainservices.ComicDomain) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		f(w, r, domain)
 	}
 }
 
-type domainHandlerFunc func(http.ResponseWriter, *http.Request, domainservices.ComicDomain)
+type domainHandleFunc func(http.ResponseWriter, *http.Request, domainservices.ComicDomain)
