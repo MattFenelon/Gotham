@@ -7,20 +7,20 @@ import (
 	"path/filepath"
 )
 
-// localFilestore is an implementation of the domainservices.FileStorer interface that stores
+// LocalFileStore is an implementation of the domainservices.FileStorer interface that stores
 // files in a known location on disk.
-type localFilestore struct {
+type LocalFileStore struct {
 	path string
 }
 
-func NewLocalFileStore(path string) *localFilestore {
-	return &localFilestore{
+func NewLocalFileStore(path string) *LocalFileStore {
+	return &LocalFileStore{
 		path: path,
 	}
 }
 
-func (store *localFilestore) Store(key string, filenames, sourcePaths []string) error {
-	keypath := filepath.Join(store.path, key)
+func (store *LocalFileStore) Store(key string, filenames, sourcePaths []string) error {
+	keypath := store.getKeyPath(key)
 
 	os.MkdirAll(keypath, os.ModeDir)
 	for i, srcpath := range sourcePaths {
@@ -32,6 +32,33 @@ func (store *localFilestore) Store(key string, filenames, sourcePaths []string) 
 	}
 
 	return nil
+}
+
+func (store *LocalFileStore) Open(name string) (*os.File, error) {
+	p := filepath.Join(store.path, name)
+	return os.Open(p)
+}
+
+func (store *LocalFileStore) GetAllKeys() (keys []string, err error) {
+	d, err := os.Open(store.path)
+	if err != nil {
+		return nil, err
+	}
+
+	return d.Readdirnames(-1)
+}
+
+func (store *LocalFileStore) GetFilenames(key string) (names []string, err error) {
+	d, err := os.Open(store.getKeyPath(key))
+	if err != nil {
+		return nil, err
+	}
+
+	return d.Readdirnames(-1)
+}
+
+func (store *LocalFileStore) getKeyPath(key string) string {
+	return filepath.Join(store.path, key)
 }
 
 func copy(dstpath, srcpath string) error {

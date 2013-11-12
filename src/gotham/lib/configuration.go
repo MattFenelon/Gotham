@@ -10,7 +10,7 @@ type Exports struct {
 	Handler http.Handler
 }
 
-func Configure(eventstore domainservices.EventStorer, filestore domainservices.FileStorer, viewstore domainservices.ViewGetStorer) (exports Exports) {
+func Configure(eventstore domainservices.EventStorer, filestore FileStore, viewstore domainservices.ViewGetStorer) (exports Exports) {
 	domain := domainservices.NewComicDomain(eventstore, filestore, viewstore)
 
 	// TODO: The API is vulnerable to Host header spoofing because the Host header is used in
@@ -22,8 +22,12 @@ func Configure(eventstore domainservices.EventStorer, filestore domainservices.F
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/", makeDomainHandleFunc(handlers.RootHandler, domain))
 	serveMux.HandleFunc("/books", makeDomainHandleFunc(handlers.BooksHandler, domain))
-	// http.FileServer(root)
-	// http.FileSystem
+	serveMux.Handle("/pages/",
+		http.StripPrefix("/pages/",
+			http.FileServer(filestoreFilesystem(func(name string) (http.File, error) {
+				return filestore.Open(name)
+			}))))
+
 	exports = Exports{Handler: serveMux}
 	return exports
 }

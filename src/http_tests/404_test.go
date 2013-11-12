@@ -8,12 +8,12 @@ import (
 )
 
 func Test404(t *testing.T) {
-	server, _, _, _ := startTestableApi()
-	defer server.Close()
+	api := newTestableApi()
+	defer api.Close()
 
-	response, err := http.Get(server.URL + "/rubbish")
+	response, err := http.Get(api.URL() + "/rubbish")
 	if err != nil {
-		t.Fatalf("Error on HTTP GET to %v: %v", server.URL, err)
+		t.Fatalf("Error on HTTP GET to %v: %v", api.URL(), err)
 	}
 
 	Convey("GET /rubbish", t, func() {

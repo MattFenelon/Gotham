@@ -1,9 +1,9 @@
 package filestore_tests
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"persistence/filestore"
 	"reflect"
 	"testing"
@@ -16,33 +16,47 @@ func TestStoringFiles(t *testing.T) {
 	defer os.RemoveAll(path)
 
 	fs := filestore.NewLocalFileStore(path)
-
 	fs.Store("test_key", []string{"one", "two"}, []string{"testdata\\1.txt", "testdata\\2.txt"})
 
-	keypath := path + "\\test_key"
-	filesAtExpectedLocation, _ := ioutil.ReadDir(keypath)
+	t.Log("It should store the files using the specified filenames")
 
-	actualFiles := make([]string, 0, len(filesAtExpectedLocation))
-	actualContents := make([][]byte, 0, len(filesAtExpectedLocation))
-	for _, f := range filesAtExpectedLocation {
-		actualFiles = append(actualFiles, f.Name())
-
-		contents, err := ioutil.ReadFile(filepath.Join(keypath, f.Name()))
-		if err != nil {
-			t.Error(err)
-		}
-		actualContents = append(actualContents, contents)
+	f1, err := fs.Open("test_key\\one")
+	defer f1.Close()
+	if err != nil {
+		t.Error(err)
+	}
+	actual, err := ioutil.ReadAll(f1)
+	if err != nil {
+		t.Error(err)
+	}
+	if bytes.Equal([]byte("1"), actual) == false {
+		t.Errorf("Expected %s but was %s", []byte("1"), actual)
 	}
 
-	t.Log("It should store the files using the filenames specified")
-	expectedFiles := []string{"one", "two"}
-	if reflect.DeepEqual(expectedFiles, actualFiles) == false {
-		t.Errorf("\tExpected %v but was %v", expectedFiles, actualFiles)
+	f2, err := fs.Open("test_key\\two")
+	defer f2.Close()
+	if err != nil {
+		t.Error(err)
+	}
+	actual, err = ioutil.ReadAll(f2)
+	if err != nil {
+		t.Error(err)
+	}
+	if bytes.Equal([]byte("2"), actual) == false {
+		t.Errorf("\tExpected %s but was %s", []byte("2"), actual)
 	}
 
-	t.Log("It should store the contents of the files")
-	expectedContents := [][]byte{[]byte("1"), []byte("2")}
-	if reflect.DeepEqual(expectedContents, actualContents) == false {
-		t.Errorf("\tExpected %s but was %s", expectedContents, actualContents)
+	t.Log("It should list the key")
+	actualKeys, _ := fs.GetAllKeys()
+	expectedKeys := []string{"test_key"}
+	if reflect.DeepEqual(actualKeys, expectedKeys) == false {
+		t.Errorf("\tExpected %v but was %v", expectedKeys, actualKeys)
+	}
+
+	t.Log("It should list the filenames under the key")
+	actualFilenames, _ := fs.GetFilenames("test_key")
+	expectedFilenames := []string{"one", "two"}
+	if reflect.DeepEqual(actualFilenames, expectedFilenames) == false {
+		t.Errorf("\tExpected %v but was %v", expectedFilenames, actualFilenames)
 	}
 }

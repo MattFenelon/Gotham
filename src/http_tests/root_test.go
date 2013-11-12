@@ -5,7 +5,6 @@ import (
 	"code.google.com/p/go-uuid/uuid"
 	"domainservices"
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -14,10 +13,10 @@ import (
 func TestRootGet(t *testing.T) {
 	t.Log("When the root resource contains comics")
 
-	server, eventstore, filestore, viewstore := startTestableApi()
-	defer server.Close()
+	api := newTestableApi()
+	defer api.Close()
 
-	comics := domainservices.NewComicDomain(eventstore, filestore, viewstore)
+	comics := domainservices.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
 	walkingDeadId := uuid.NewRandom()
 	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
@@ -25,9 +24,9 @@ func TestRootGet(t *testing.T) {
 
 	t.Log("\tGET /")
 
-	response, err := http.Get(server.URL)
+	response, err := http.Get(api.URL())
 	if err != nil {
-		t.Fatalf("Error on HTTP GET to %v: %v", server.URL, err)
+		t.Fatalf("Error on HTTP GET to %v: %v", api.URL(), err)
 	}
 
 	defer response.Body.Close()
@@ -47,8 +46,8 @@ func TestRootGet(t *testing.T) {
 	t.Log("\tThe response body should include all comics in JSON format")
 	expectedBody :=
 		`{"series":[` +
-			`{"title":"The Walking Dead","links":{"seriesimage":{"href":"http://gotham/pages/` + walkingDeadId.String() + `/0.jpg"}}},` +
-			`{"title":"Fatale","links":{"seriesimage":{"href":"http://gotham/pages/` + fataleId.String() + `/0.jpg"}}}` +
+			`{"title":"The Walking Dead","links":{"seriesimage":{"href":"` + api.URL() + `/pages/` + walkingDeadId.String() + `/0.jpg"}}},` +
+			`{"title":"Fatale","links":{"seriesimage":{"href":"` + api.URL() + `/pages/` + fataleId.String() + `/0.jpg"}}}` +
 			`]}` + "\n"
 
 	if actualBody != expectedBody {
@@ -69,10 +68,10 @@ type root struct {
 func TestRootGetSeriesImage(t *testing.T) {
 	t.Log("When the root resource contains comics with different series images")
 
-	server, eventstore, filestore, viewstore := startTestableApi()
-	defer server.Close()
+	api := newTestableApi()
+	defer api.Close()
 
-	comics := domainservices.NewComicDomain(eventstore, filestore, viewstore)
+	comics := domainservices.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
 	walkingDeadId := uuid.NewRandom()
 	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg"}, []string{"testdata\\0.jpg"})
@@ -83,8 +82,8 @@ func TestRootGetSeriesImage(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Logf("\tGET %v", server.URL)
-	root := getRoot(t, server.URL)
+	t.Logf("\tGET %v", api.URL())
+	root := getRoot(t, api.URL())
 	if len(root.Series) != 2 {
 		t.Fatalf("\tExpected 2 series but was %v", len(root.Series))
 	}
@@ -103,8 +102,7 @@ func checkSeriesImage(t *testing.T, imageUri string, expectedImage []byte) {
 		t.Errorf("\t\tErr on GET to %v: %v", imageUri, err)
 	}
 	defer rsp.Body.Close()
-	var actualImage []byte
-	io.ReadFull(rsp.Body, actualImage)
+	actualImage, _ := ioutil.ReadAll(rsp.Body)
 
 	t.Log("\t\tThe response should be 200 OK")
 	if rsp.StatusCode != 200 {
