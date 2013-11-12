@@ -11,13 +11,11 @@ import (
 // files in a known location on disk.
 type localFilestore struct {
 	path string
-	keys []string
 }
 
 func NewLocalFileStore(path string) *localFilestore {
 	return &localFilestore{
 		path: path,
-		keys: make([]string, 0, 50),
 	}
 }
 
