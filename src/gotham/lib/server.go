@@ -8,13 +8,13 @@ import (
 )
 
 func StartServer() {
-	cluster := []string{"127.0.0.1:8087"}
-	clientId := "gotham"
+	riakCluster := []string{"127.0.0.1:8087"}
+	riakClientId := "gotham"
 
 	log.Println("Gotham is starting...")
 
-	eventstore := riak.NewRiakEventStore(cluster, clientId)
-	viewstore := riak.NewViewStore(cluster, clientId)
+	eventstore := riak.NewRiakEventStore(riakCluster, riakClientId)
+	viewstore := riak.NewViewStore(riakCluster, riakClientId)
 	filestore := filestore.NewLocalFileStore("c:\\gothamfs")
 	exports := Configure(eventstore, filestore, viewstore)
 
