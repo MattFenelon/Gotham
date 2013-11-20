@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func makeFilestoreHandler(path string, filestore *FileStore) {
+func makeFilestoreHandler(path string, filestore FileStore) http.Handler {
 	return http.StripPrefix(path,
 		http.FileServer(filestoreFilesystem(func(name string) (http.File, error) {
 			return filestore.Open(name)
