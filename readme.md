@@ -23,17 +23,17 @@ Content-Type: application/json
 	"series": [
 		{
 			"title": "Prophet",
-			"links": {
-				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"},
-				"promotedbook": {"href": "http://gotham/books/random"}
-			},
+			"links": [
+				{"rel":"seriesimage", "href": "http://gotham/pages/random/0.jpg"},
+				{"rel":"promotedbook", "href": "http://gotham/books/random"}
+			],
 		},
 		{
 			"title": "Jupiter's Legacy",
-			"links": {
-				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"},
-				"promotedbook": {"href": "http://gotham/books/random"}
-			},
+			"links": [
+				{"rel":"seriesimage", "href": "http://gotham/pages/random/0.jpg"},
+				{"rel":"promotedbook", "href": "http://gotham/books/random"}
+			],
 		}
 	]
 }

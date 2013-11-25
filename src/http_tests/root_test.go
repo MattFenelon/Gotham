@@ -46,8 +46,8 @@ func TestRootGet(t *testing.T) {
 	t.Log("\tThe response body should include all comics in JSON format")
 	expectedBody :=
 		`{"series":[` +
-			`{"title":"The Walking Dead","links":{"seriesimage":{"href":"` + api.URL() + `/pages/` + walkingDeadId.String() + `/0.jpg"},"promotedbook":{"href":"` + api.URL() + `/books/` + walkingDeadId.String() + `"}}},` +
-			`{"title":"Fatale","links":{"seriesimage":{"href":"` + api.URL() + `/pages/` + fataleId.String() + `/0.jpg"},"promotedbook":{"href":"` + api.URL() + `/books/` + fataleId.String() + `"}}}` +
+			`{"title":"The Walking Dead","links":[{"rel":"seriesimage","href":"` + api.URL() + `/pages/` + walkingDeadId.String() + `/0.jpg"},{"rel":"promotedbook","href":"` + api.URL() + `/books/` + walkingDeadId.String() + `"}]},` +
+			`{"title":"Fatale","links":[{"rel":"seriesimage","href":"` + api.URL() + `/pages/` + fataleId.String() + `/0.jpg"},{"rel":"promotedbook","href":"` + api.URL() + `/books/` + fataleId.String() + `"}]}` +
 			`]}` + "\n"
 
 	if actualBody != expectedBody {
@@ -57,13 +57,9 @@ func TestRootGet(t *testing.T) {
 
 type root struct {
 	Series []struct {
-		Links struct {
-			Seriesimage struct {
-				Href string
-			}
-			PromotedBook struct {
-				Href string
-			}
+		Links []struct {
+			Rel  string
+			Href string
 		}
 	}
 }
@@ -93,7 +89,7 @@ func TestRootGetSeriesImage(t *testing.T) {
 
 	for i, s := range root.Series {
 		expectedImage := expectedImages[i]
-		checkSeriesImage(t, s.Links.Seriesimage.Href, expectedImage)
+		checkSeriesImage(t, s.Links[0].Href, expectedImage)
 	}
 }
 

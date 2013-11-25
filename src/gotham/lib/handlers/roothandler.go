@@ -12,13 +12,8 @@ type rootView struct {
 }
 
 type rootViewSeries struct {
-	Title string              `json:"title"`
-	Links rootViewSeriesLinks `json:"links"`
-}
-
-type rootViewSeriesLinks struct {
-	SeriesImage  linkView `json:"seriesimage"`
-	PromotedBook linkView `json:"promotedbook"`
+	Title string     `json:"title"`
+	Links []linkView `json:"links"`
 }
 
 func RootHandler(w http.ResponseWriter, r *http.Request, d domain.ComicDomain) {
@@ -37,9 +32,9 @@ func RootHandler(w http.ResponseWriter, r *http.Request, d domain.ComicDomain) {
 	for _, s := range src.Series {
 		series := rootViewSeries{
 			Title: s.Title,
-			Links: rootViewSeriesLinks{
-				SeriesImage:  linkView{Href: fmt.Sprintf("http://%v/pages/%v", r.Host, s.ImageKey)},
-				PromotedBook: linkView{Href: fmt.Sprintf("http://%v/books/%v", r.Host, s.PromotedBookId)},
+			Links: []linkView{
+				linkView{Rel: "seriesimage", Href: fmt.Sprintf("http://%v/pages/%v", r.Host, s.ImageKey)},
+				linkView{Rel: "promotedbook", Href: fmt.Sprintf("http://%v/books/%v", r.Host, s.PromotedBookId)},
 			},
 		}
 		dst.Series = append(dst.Series, series)
