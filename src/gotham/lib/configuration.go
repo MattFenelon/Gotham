@@ -22,6 +22,7 @@ func Configure(eventstore domain.EventStorer, filestore FileStore, viewstore dom
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/", makeDomainHandleFunc(handlers.RootHandler, domain))
 	serveMux.HandleFunc("/books", makeDomainHandleFunc(handlers.BooksHandler, domain))
+	serveMux.HandleFunc("/books/", makeDomainHandleFunc(handlers.BookHandler, domain))
 	serveMux.Handle("/pages/", makeFilestoreHandler("/pages/", filestore))
 
 	exports = Exports{Handler: serveMux}

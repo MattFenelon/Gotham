@@ -24,13 +24,15 @@ Content-Type: application/json
 		{
 			"title": "Prophet",
 			"links": {
-				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"}
+				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"},
+				"promotedbook": {"href": "http://gotham/books/random"}
 			},
 		},
 		{
 			"title": "Jupiter's Legacy",
 			"links": {
-				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"}
+				"seriesimage": {"href": "http://gotham/pages/random/0.jpg"},
+				"promotedbook": {"href": "http://gotham/books/random"}
 			},
 		}
 	]
@@ -38,6 +40,8 @@ Content-Type: application/json
 ```
 
 ### Comic resource
+
+#### Add a comic
 
 The comic resource can be used to add comics.
 
@@ -83,4 +87,29 @@ Content-Type: image/jpeg
 *Response*
 ```HTTP
 HTTP/1.1 204 No Content
+```
+
+#### Get a comic
+
+*Request*
+```HTTP
+GET /books/{random} HTTP/1.1
+Host: gotham
+Accept: application/json
+```
+
+*Response*
+```HTTP
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+```JSON
+{
+	"links":[
+		{"rel":"item","href":"http://gotham/pages/random/0.jpg"},
+		{"rel":"item","href":"http://gotham/pages/random/1.jpg"},
+		{"rel":"item","href":"http://gotham/pages/random/2.jpg"},
+		{"rel":"item","href":"http://gotham/pages/random/3.jpg"}
+	]
+}
 ```
