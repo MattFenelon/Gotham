@@ -1,4 +1,4 @@
-package domainservices
+package domain
 
 import (
 	"code.google.com/p/go-uuid/uuid"

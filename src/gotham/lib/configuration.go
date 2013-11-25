@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"domainservices"
+	"domain"
 	"gotham/lib/handlers"
 	"net/http"
 )
@@ -10,8 +10,8 @@ type Exports struct {
 	Handler http.Handler
 }
 
-func Configure(eventstore domainservices.EventStorer, filestore FileStore, viewstore domainservices.ViewGetStorer) (exports Exports) {
-	domain := domainservices.NewComicDomain(eventstore, filestore, viewstore)
+func Configure(eventstore domain.EventStorer, filestore FileStore, viewstore domain.ViewGetStorer) (exports Exports) {
+	domain := domain.NewComicDomain(eventstore, filestore, viewstore)
 
 	// TODO: The API is vulnerable to Host header spoofing because the Host header is used in
 	// returned links. The vulnerability can be closed off by ensuring that the API only responds
@@ -28,10 +28,10 @@ func Configure(eventstore domainservices.EventStorer, filestore FileStore, views
 	return exports
 }
 
-func makeDomainHandleFunc(f domainHandleFunc, domain domainservices.ComicDomain) http.HandlerFunc {
+func makeDomainHandleFunc(f domainHandleFunc, domain domain.ComicDomain) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		f(w, r, domain)
 	}
 }
 
-type domainHandleFunc func(http.ResponseWriter, *http.Request, domainservices.ComicDomain)
+type domainHandleFunc func(http.ResponseWriter, *http.Request, domain.ComicDomain)

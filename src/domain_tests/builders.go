@@ -2,12 +2,12 @@ package domain_tests
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"domain"
+	"domain/model"
 )
 
-func NewComicAdded(id uuid.UUID, seriesTitle, bookTitle string, pages []string) *domain.ComicAdded {
-	series, _ := domain.NewSeriesTitle(seriesTitle)
-	book, _ := domain.NewBookTitle(bookTitle)
-	comicId := domain.NewComicId(id)
-	return domain.NewComicAdded(comicId, series, book, pages)
+func NewComicAdded(id uuid.UUID, seriesTitle, bookTitle string, pages []string) *model.ComicAdded {
+	series, _ := model.NewSeriesTitle(seriesTitle)
+	book, _ := model.NewBookTitle(bookTitle)
+	comicId := model.NewComicId(id)
+	return model.NewComicAdded(comicId, series, book, pages)
 }

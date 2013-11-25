@@ -2,7 +2,7 @@ package domain_tests
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"domainservices"
+	"domain"
 	"reflect"
 	"testing"
 )
@@ -13,7 +13,7 @@ func TestGetFrontpageViewWithASingleComic(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	d := domainservices.NewComicDomain(es, fs, vs)
+	d := domain.NewComicDomain(es, fs, vs)
 	id := uuid.NewRandom()
 	d.AddComic(id, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"source//path//0.jpg", "source//path//1.jpg"})
 
@@ -41,17 +41,17 @@ func TestGetFrontpageViewWithMultipleSeries(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	d := domainservices.NewComicDomain(es, fs, vs)
+	d := domain.NewComicDomain(es, fs, vs)
 	walkingDeadId := uuid.NewRandom()
 	warriorId := uuid.NewRandom()
 	d.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg"}, []string{"source//path//0.jpg"})
 	d.AddComic(warriorId, "Warrior", "Warrior 1", []string{"0.jpg"}, []string{"source//path//0.jpg"})
 
 	actual := d.GetFrontPageView()
-	expected := &domainservices.FrontPageView{
-		Series: []domainservices.FrontPageViewSeries{
-			domainservices.FrontPageViewSeries{Title: "Warrior", ImageKey: warriorId.String() + "/0.jpg"},
-			domainservices.FrontPageViewSeries{Title: "The Walking Dead", ImageKey: walkingDeadId.String() + "/0.jpg"},
+	expected := &domain.FrontPageView{
+		Series: []domain.FrontPageViewSeries{
+			domain.FrontPageViewSeries{Title: "Warrior", ImageKey: warriorId.String() + "/0.jpg"},
+			domain.FrontPageViewSeries{Title: "The Walking Dead", ImageKey: walkingDeadId.String() + "/0.jpg"},
 		},
 	}
 
@@ -67,7 +67,7 @@ func TestGetFrontpageViewWithMultipleComicsFromTheSameSeries(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	d := domainservices.NewComicDomain(es, fs, vs)
+	d := domain.NewComicDomain(es, fs, vs)
 	firstId := uuid.NewRandom()
 	lastId := uuid.NewRandom()
 	d.AddComic(firstId, "The Walking Dead", "The Walking Dead 114", []string{"0.jpg"}, []string{"source//path//0.jpg"})
@@ -97,11 +97,11 @@ func TestGetFrontpageViewWithNoSeries(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	d := domainservices.NewComicDomain(es, fs, vs)
+	d := domain.NewComicDomain(es, fs, vs)
 
 	actual := d.GetFrontPageView()
-	expected := &domainservices.FrontPageView{
-		Series: []domainservices.FrontPageViewSeries{},
+	expected := &domain.FrontPageView{
+		Series: []domain.FrontPageViewSeries{},
 	}
 
 	t.Log("The view's series list should be empty")

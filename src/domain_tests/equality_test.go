@@ -2,7 +2,7 @@ package domain_tests
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"domain"
+	"domain/model"
 	"testing"
 )
 
@@ -19,14 +19,14 @@ type testType struct {
 func buildTests() []equalityTest {
 	tests := []equalityTest{}
 
-	sourceComicId := domain.ParseComicId("ab5b2194-4090-48a4-8b8e-f66963908451")
+	sourceComicId := model.ParseComicId("ab5b2194-4090-48a4-8b8e-f66963908451")
 	tests = append(tests, equalityTest{
 		source: sourceComicId,
 		sameAs: map[string]interface{}{
 			"Same variable": sourceComicId,
-			"Same value":    domain.ParseComicId("ab5b2194-4090-48a4-8b8e-f66963908451")},
+			"Same value":    model.ParseComicId("ab5b2194-4090-48a4-8b8e-f66963908451")},
 		differentTo: map[string]interface{}{
-			"Different value": domain.ParseComicId("3307b275-3a65-4587-9dc9-17c467564d16"),
+			"Different value": model.ParseComicId("3307b275-3a65-4587-9dc9-17c467564d16"),
 			"Nil":             nil,
 			"Another type":    testType{}}})
 

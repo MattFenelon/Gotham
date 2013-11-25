@@ -1,19 +1,19 @@
-package domainservices
+package domain
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"domain"
+	"domain/model"
 	"errors"
 	"log"
 )
 
 func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pageSources []string, eventstorer EventStorer, filestorer FileStorer, vs frontPageViewStore) error {
-	series, err := domain.NewSeriesTitle(seriesTitle)
+	series, err := model.NewSeriesTitle(seriesTitle)
 	if err != nil {
 		return err
 	}
 
-	title, err := domain.NewBookTitle(bookTitle)
+	title, err := model.NewBookTitle(bookTitle)
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 		return errors.New("At least one page source is required")
 	}
 
-	event := domain.NewComicAdded(domain.NewComicId(newId), series, title, pages)
+	event := model.NewComicAdded(model.NewComicId(newId), series, title, pages)
 
 	log.Printf("Storing new comic book %v\n", event)
 
@@ -37,7 +37,7 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 	return nil
 }
 
-func saveFrontPage(vs frontPageViewStore, event *domain.ComicAdded) {
+func saveFrontPage(vs frontPageViewStore, event *model.ComicAdded) {
 	frontPage := vs.Get()
 
 	for i, s := range frontPage.Series {

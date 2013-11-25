@@ -1,11 +1,11 @@
-package domainservices
+package domain
 
 import (
-	"domain"
+	"domain/model"
 )
 
 type EventStorer interface {
-	AddEvent(event *domain.ComicAdded) error
+	AddEvent(event *model.ComicAdded) error
 }
 
 // FileStorer is an interface for storing files against a key.

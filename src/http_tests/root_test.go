@@ -3,7 +3,7 @@ package http_tests
 import (
 	"bytes"
 	"code.google.com/p/go-uuid/uuid"
-	"domainservices"
+	"domain"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -16,7 +16,7 @@ func TestRootGet(t *testing.T) {
 	api := newTestableApi()
 	defer api.Close()
 
-	comics := domainservices.NewComicDomain(api.es, api.fs, api.vs)
+	comics := domain.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
 	walkingDeadId := uuid.NewRandom()
 	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
@@ -71,7 +71,7 @@ func TestRootGetSeriesImage(t *testing.T) {
 	api := newTestableApi()
 	defer api.Close()
 
-	comics := domainservices.NewComicDomain(api.es, api.fs, api.vs)
+	comics := domain.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
 	walkingDeadId := uuid.NewRandom()
 	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg"}, []string{"testdata\\0.jpg"})

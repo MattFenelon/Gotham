@@ -2,7 +2,7 @@ package riak
 
 import (
 	"bytes"
-	"domain"
+	"domain/model"
 	"encoding/gob"
 	"github.com/MattFenelon/riakpbc"
 )
@@ -37,7 +37,7 @@ func (r *RiakEventStore) connect() (client *riakpbc.Client, err error) {
 	return client, nil
 }
 
-func (r *RiakEventStore) AddEvent(event *domain.ComicAdded) error {
+func (r *RiakEventStore) AddEvent(event *model.ComicAdded) error {
 	client, err := r.connect()
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (r *RiakEventStore) AddEvent(event *domain.ComicAdded) error {
 	return nil
 }
 
-func (r *RiakEventStore) GetEvent(comicId string) (event *domain.ComicAdded, err error) {
+func (r *RiakEventStore) GetEvent(comicId string) (event *model.ComicAdded, err error) {
 	client, err := r.connect()
 	if err != nil {
 		return nil, err
@@ -81,7 +81,7 @@ func (r *RiakEventStore) GetEvent(comicId string) (event *domain.ComicAdded, err
 	value := bytes.NewBuffer(content[0].GetValue())
 	dec := gob.NewDecoder(value)
 
-	event = &domain.ComicAdded{}
+	event = &model.ComicAdded{}
 	err = dec.Decode(event)
 	if err != nil {
 		return nil, err

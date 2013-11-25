@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"domainservices"
+	"domain"
 	"encoding/json"
 	"log"
 	"mime"
@@ -31,7 +31,7 @@ func (f *addBookForm) RemoveAll() error {
 	return nil
 }
 
-func BooksHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicDomain) {
+func BooksHandler(w http.ResponseWriter, r *http.Request, d domain.ComicDomain) {
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return

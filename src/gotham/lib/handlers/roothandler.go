@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"domainservices"
+	"domain"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -24,7 +24,7 @@ type linkView struct {
 	Href string `json:"href"`
 }
 
-func RootHandler(w http.ResponseWriter, r *http.Request, d domainservices.ComicDomain) {
+func RootHandler(w http.ResponseWriter, r *http.Request, d domain.ComicDomain) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return

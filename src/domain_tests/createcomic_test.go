@@ -3,7 +3,7 @@ package domain_tests
 import (
 	"code.google.com/p/go-uuid/uuid"
 	"domain"
-	"domainservices"
+	"domain/model"
 	"testing"
 )
 
@@ -11,7 +11,7 @@ func TestCreateComic(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	comics := domainservices.NewComicDomain(es, fs, vs)
+	comics := domain.NewComicDomain(es, fs, vs)
 
 	id := uuid.NewRandom()
 	expectedPages := []string{"0.jpg", "1.jpg", "2.jpg", "3.jpg"}
@@ -31,13 +31,13 @@ func TestCreateMultipleComics(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	comics := domainservices.NewComicDomain(es, fs, vs)
+	comics := domain.NewComicDomain(es, fs, vs)
 
 	id1 := uuid.NewRandom()
 	id2 := uuid.NewRandom()
 	expectedPages1 := []string{"0.jpg", "1.jpg", "2.jpg"}
 	expectedPages2 := []string{"0.jpg"}
-	expected := []*domain.ComicAdded{
+	expected := []*model.ComicAdded{
 		NewComicAdded(id1, "Prophet", "Prophet 31", expectedPages1),
 		NewComicAdded(id2, "Batman", "Batman 1", expectedPages2)}
 
@@ -57,7 +57,7 @@ func TestCreateComicTitleTrimming(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	comics := domainservices.NewComicDomain(es, fs, vs)
+	comics := domain.NewComicDomain(es, fs, vs)
 
 	id := uuid.NewRandom()
 	expected := NewComicAdded(id, "Series With Whitespace", "Title With Whitespace", []string{"0.jpg"})
@@ -73,7 +73,7 @@ func TestCreateComicNoBookTitle(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	comics := domainservices.NewComicDomain(es, fs, vs)
+	comics := domain.NewComicDomain(es, fs, vs)
 
 	t.Log("When the book title is an empty string\nor is only whitespace")
 	emptyErr := comics.AddComic(uuid.NewRandom(), "Batman & Robin", "", []string{}, []string{})
@@ -97,7 +97,7 @@ func TestCreateComicNoSeriesTitle(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	comics := domainservices.NewComicDomain(es, fs, vs)
+	comics := domain.NewComicDomain(es, fs, vs)
 
 	t.Log("When the series title is an empty string\nor is only whitespace")
 	emptyErr := comics.AddComic(uuid.NewRandom(), "", "Batman 99", []string{}, []string{})
@@ -121,7 +121,7 @@ func TestCreateComicNoPages(t *testing.T) {
 	es := NewFakeEventStorer()
 	fs := NewFakeFileStore()
 	vs := NewFakeViewStore()
-	comics := domainservices.NewComicDomain(es, fs, vs)
+	comics := domain.NewComicDomain(es, fs, vs)
 
 	t.Log("When the comic has no pages, or page sources")
 	pagesErr := comics.AddComic(uuid.NewRandom(), "Batman", "Batman 99", []string{}, []string{})

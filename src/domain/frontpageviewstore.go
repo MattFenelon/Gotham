@@ -1,4 +1,4 @@
-package domainservices
+package domain
 
 type frontPageViewStore struct {
 	vs ViewGetStorer

@@ -1,4 +1,4 @@
-package domainservices
+package domain
 
 type FrontPageView struct {
 	Series []FrontPageViewSeries

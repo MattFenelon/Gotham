@@ -1,7 +1,7 @@
 package riak_tests
 
 import (
-	"domain"
+	"domain/model"
 	"persistence/riak"
 	"testing"
 )
@@ -9,9 +9,9 @@ import (
 func TestComicAdded(t *testing.T) {
 	t.Log("When adding a single comic")
 
-	seriesTitle, _ := domain.NewSeriesTitle("Prophet")
-	title, _ := domain.NewBookTitle("Prophet 31")
-	expectedEvent := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title, []string{"0.jpg", "1.jpg"})
+	seriesTitle, _ := model.NewSeriesTitle("Prophet")
+	title, _ := model.NewBookTitle("Prophet 31")
+	expectedEvent := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"0.jpg", "1.jpg"})
 
 	StoreEvent(t, expectedEvent)
 	defer DeleteEvent(t, expectedEvent.Id.String())
@@ -27,15 +27,15 @@ func TestComicAdded(t *testing.T) {
 func TestAddingMultipleEvents(t *testing.T) {
 	t.Log("When adding multiple comics")
 
-	seriesTitle, _ := domain.NewSeriesTitle("Spider-men")
-	title, _ := domain.NewBookTitle("Spider-men 1")
-	expectedEvent1 := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title, []string{"1.jpg", "2.jpg"})
+	seriesTitle, _ := model.NewSeriesTitle("Spider-men")
+	title, _ := model.NewBookTitle("Spider-men 1")
+	expectedEvent1 := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"1.jpg", "2.jpg"})
 	StoreEvent(t, expectedEvent1)
 	defer DeleteEvent(t, expectedEvent1.Id.String())
 
-	seriesTitle, _ = domain.NewSeriesTitle("Guardians of the Galaxy")
-	title, _ = domain.NewBookTitle("Guardians of the Galaxy 11")
-	expectedEvent2 := domain.NewComicAdded(domain.NewRandomComicId(), seriesTitle, title, []string{"0.jpg"})
+	seriesTitle, _ = model.NewSeriesTitle("Guardians of the Galaxy")
+	title, _ = model.NewBookTitle("Guardians of the Galaxy 11")
+	expectedEvent2 := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"0.jpg"})
 	StoreEvent(t, expectedEvent2)
 	defer DeleteEvent(t, expectedEvent2.Id.String())
 
@@ -48,15 +48,15 @@ func TestAddingMultipleEvents(t *testing.T) {
 	}
 }
 
-func StoreEvent(t *testing.T, event *domain.ComicAdded) {
+func StoreEvent(t *testing.T, event *model.ComicAdded) {
 	store := riak.NewRiakEventStore(riakCluster, riakClientId)
 	if err := store.AddEvent(event); err != nil {
 		t.Fatal(err)
 	}
 }
 
-// TODO: What type should comicId be? What's the correct interface into the domain?
-func GetEvent(t *testing.T, comicId string) (event *domain.ComicAdded) {
+// TODO: What type should comicId be? What's the correct interface into the model?
+func GetEvent(t *testing.T, comicId string) (event *model.ComicAdded) {
 	store := riak.NewRiakEventStore(riakCluster, riakClientId)
 	event, err := store.GetEvent(comicId)
 	if err != nil {
