@@ -5,6 +5,7 @@ type FrontPageView struct {
 }
 
 type FrontPageViewSeries struct {
-	Title    string
-	ImageKey string
+	Title          string
+	ImageKey       string
+	PromotedBookId string
 }

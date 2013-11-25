@@ -33,6 +33,11 @@ func TestGetFrontpageViewWithASingleComic(t *testing.T) {
 	if actual.Series[0].ImageKey != id.String()+"/0.jpg" {
 		t.Errorf("\tExpected %v but was %v", id.String()+"/0.jpg", actual.Series[0].ImageKey)
 	}
+
+	t.Log("The front page should use the comic as the promoted comic")
+	if actual.Series[0].PromotedBookId != id.String() {
+		t.Errorf("\tExpected %v but was %v", id.String(), actual.Series[0].PromotedBookId)
+	}
 }
 
 func TestGetFrontpageViewWithMultipleSeries(t *testing.T) {
@@ -50,8 +55,8 @@ func TestGetFrontpageViewWithMultipleSeries(t *testing.T) {
 	actual := d.GetFrontPageView()
 	expected := &domain.FrontPageView{
 		Series: []domain.FrontPageViewSeries{
-			domain.FrontPageViewSeries{Title: "Warrior", ImageKey: warriorId.String() + "/0.jpg"},
-			domain.FrontPageViewSeries{Title: "The Walking Dead", ImageKey: walkingDeadId.String() + "/0.jpg"},
+			domain.FrontPageViewSeries{Title: "Warrior", ImageKey: warriorId.String() + "/0.jpg", PromotedBookId: warriorId.String()},
+			domain.FrontPageViewSeries{Title: "The Walking Dead", ImageKey: walkingDeadId.String() + "/0.jpg", PromotedBookId: walkingDeadId.String()},
 		},
 	}
 
@@ -88,6 +93,11 @@ func TestGetFrontpageViewWithMultipleComicsFromTheSameSeries(t *testing.T) {
 	t.Log("The front page should use the last added comic's first page for the series image")
 	if actual.Series[0].ImageKey != lastId.String()+"/1.jpg" {
 		t.Errorf("\tExpected %v but was %v", lastId.String()+"/1.jpg", actual.Series[0].ImageKey)
+	}
+
+	t.Log("The front page should use the last added comic as the promoted comic")
+	if actual.Series[0].PromotedBookId != lastId.String() {
+		t.Errorf("\tExpected %v but was %v", lastId.String(), actual.Series[0].PromotedBookId)
 	}
 }
 

@@ -18,6 +18,7 @@ func (viewStore *frontPageViewStore) Store(event *model.ComicAdded) {
 	for i, s := range fp.Series {
 		if s.Title == event.SeriesTitle.String() {
 			fp.Series[i].ImageKey = event.Id.String() + "/" + event.Pages[0]
+			fp.Series[i].PromotedBookId = event.Id.String()
 			viewStore.doStore(&fp)
 			return
 		}
@@ -25,8 +26,9 @@ func (viewStore *frontPageViewStore) Store(event *model.ComicAdded) {
 
 	newseries := []FrontPageViewSeries{
 		FrontPageViewSeries{
-			Title:    event.SeriesTitle.String(),
-			ImageKey: event.Id.String() + "/" + event.Pages[0],
+			Title:          event.SeriesTitle.String(),
+			ImageKey:       event.Id.String() + "/" + event.Pages[0],
+			PromotedBookId: event.Id.String(),
 		},
 	}
 
