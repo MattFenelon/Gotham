@@ -1,0 +1,164 @@
+POST http://gotham:7001/books HTTP/1.1
+Content-Type: multipart/form-data; boundary=-------------------------acebdf13572468
+User-Agent: Fiddler
+Host: gotham:7001
+Content-Length: 24485681
+
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="metadata"
+
+{
+"seriesTitle": "Prophet",
+"title": "Prophet 30"
+}
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="0.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\00.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="1.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\01.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="2.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\02.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="3-4.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\03-04.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="5.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\05.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="6.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\06.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="7.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\07.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="8.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\08.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="9.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\09.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="10.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\10.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="11.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\11.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="12.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\12.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="13.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\13.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="14.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\14.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="15.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\15.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="16.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\16.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="17.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\17.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="18.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\18.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="19.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\19.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="20.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\20.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="21.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\21.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="22.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\22.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="23-24.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\23-24.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="25.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\25.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="26.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\26.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="27.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\27.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="28.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\28.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="29.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\29.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="30.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\30.jpg*@>
+---------------------------acebdf13572468
+Content-Disposition: form-data; name="page"; filename="31.jpg"
+Content-Type: image/jpeg
+
+<@INCLUDE *C:\Users\Matthew\Downloads\Mimo\alt.binaries.comics.dcp\Prophet 030 (2012) (digital) (Minutemen-TwiztidScanner)\31.jpg*@>
+---------------------------acebdf13572468--
