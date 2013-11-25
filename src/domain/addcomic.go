@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pageSources []string, eventstorer EventStorer, filestorer FileStorer, vs frontPageViewStore) error {
+func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pageSources []string, eventstorer EventStorer, filestorer FileStorer, fpVs frontPageViewStore, comicVs *comicViewStore) error {
 	series, err := model.NewSeriesTitle(seriesTitle)
 	if err != nil {
 		return err
@@ -32,7 +32,8 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 
 	eventstorer.AddEvent(event)                             // TODO: Deal with errors from the eventstorer
 	filestorer.Store(event.Id.String(), pages, pageSources) // TODO: Deal with errors from the filestorer
-	saveFrontPage(vs, event)
+	comicVs.Store(event)
+	saveFrontPage(fpVs, event)
 
 	return nil
 }
