@@ -24,6 +24,7 @@ Content-Type: application/json
 		{
 			"title": "Prophet",
 			"links": [
+				{"rel":"self", "href": "http://gotham/series/random"},
 				{"rel":"seriesimage", "href": "http://gotham/pages/random/0.jpg"},
 				{"rel":"promotedbook", "href": "http://gotham/books/random"}
 			],
@@ -31,9 +32,54 @@ Content-Type: application/json
 		{
 			"title": "Jupiter's Legacy",
 			"links": [
+				{"rel":"self", "href": "http://gotham/series/random"},
 				{"rel":"seriesimage", "href": "http://gotham/pages/random/0.jpg"},
 				{"rel":"promotedbook", "href": "http://gotham/books/random"}
 			],
+		}
+	]
+}
+```
+
+### Series resource
+
+*Request*
+```HTTP
+GET /series/{opaque} HTTP/1.1
+Host: gotham
+Accept: application/json
+```
+
+*Response*
+```HTTP
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+```JSON
+{
+	"title": "Saga",
+	"books": [
+		{
+			"title": "Saga 13",
+			"publishedDate": "2013-08-14T00:00:00Z", // RFC 3339 format
+			"writtenBy": "Brian K. Vaughan",
+			"artBy": "Fiona Staples",
+			"blurb": "THE SMASH-HIT, CRITICALLY ACCLAIMED SERIES RETURNS!\nNow that you've read the first two bestselling collections of SAGA, you're all caught up and ready to jump on the ongoing train with Chapter Thirteen, beginning an all-new monthly sci-fi/fantasy adventure, as Hazel and her parents head to the planet Quietus in search of cult romance novelist D. Oswald Heist.",
+			"links": [
+				{"rel":"self", "href": "http://gotham/books/{opaque}"},
+				{"rel":"bookimage", "href": "http://gotham/pages/{opaque}"}
+			]
+		},
+		{
+			"title": "Saga 12",
+			"publishedDate": "2013-04-10T00:00:00Z",
+			"writtenBy": "Brian K. Vaughan",
+			"artBy": "Fiona Staples",
+			"blurb": "Prince Robot IV makes his move.",
+			"links": [
+				{"rel":"self", "href": "http://gotham/books/{opaque}"},
+				{"rel":"bookimage", "href": "http://gotham/pages/{opaque}"}
+			]
 		}
 	]
 }
