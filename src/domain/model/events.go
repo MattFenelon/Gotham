@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"reflect"
 )
 
 type ComicAdded struct {
@@ -28,19 +29,7 @@ func (a ComicAdded) Equal(b interface{}) bool {
 }
 
 func (a *ComicAdded) equalTo(b *ComicAdded) bool {
-	if a.Id.Equal(b.Id) && a.SeriesTitle == b.SeriesTitle && a.Title == b.Title {
-		if len(a.Pages) != len(b.Pages) {
-			return false
-		}
-		for i, v := range a.Pages {
-			if b.Pages[i] != v {
-				return false
-			}
-		}
-		return true
-	}
-
-	return false
+	return reflect.DeepEqual(a, b)
 }
 
 func (ca ComicAdded) String() string {
