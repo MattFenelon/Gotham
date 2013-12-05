@@ -111,19 +111,24 @@ Content-Type: application/json
 {
 	"seriesTitle": "Prophet",
 	"title": "Prophet 31",
+	"publishedDate": "2012-11-28T00:00:00Z", // RFC 3339 format
+	"writtenBy": ["Brandon Graham", "Simon Roy", "Giannis Milonogiannis"],
+	"artBy": ["Giannis Milonogiannis"],
+	"coverBy": "Boo Cook",
+	"blurb": "Old Man Prophet goes to meet with a lost matriarchal tribe of humanity to try to form an alliance."
 }
 --Any-ASCII-string
-Content-Disposition: form-data; name="page"
-Content-Type: image/jpeg
-
-<Binary content goes here>
---Any-ASCII-string
-Content-Disposition: form-data; name="page"
-Content-Type: image/jpeg
-
-<Binary content goes here>
---Any-ASCII-string
 Content-Disposition: form-data; name="page"; filename="0.jpg"
+Content-Type: image/jpeg
+
+<Binary content goes here>
+--Any-ASCII-string
+Content-Disposition: form-data; name="page"; filename="1.jpg"
+Content-Type: image/jpeg
+
+<Binary content goes here>
+--Any-ASCII-string
+Content-Disposition: form-data; name="page"; filename="2.jpg"
 Content-Type: image/jpeg
 
 <Binary content goes here>
