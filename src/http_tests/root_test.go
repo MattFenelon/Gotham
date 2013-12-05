@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func TestRootGet(t *testing.T) {
@@ -19,8 +20,8 @@ func TestRootGet(t *testing.T) {
 	comics := domain.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
 	walkingDeadId := uuid.NewRandom()
-	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
-	comics.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
+	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"}, []string{}, []string{}, time.Time{}, "")
+	comics.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	t.Log("\tGET /")
 
@@ -73,8 +74,8 @@ func TestRootGetSeriesImage(t *testing.T) {
 	comics := domain.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
 	walkingDeadId := uuid.NewRandom()
-	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg"}, []string{"testdata\\0.jpg"})
-	comics.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"1.jpg"}, []string{"testdata\\1.jpg"})
+	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg"}, []string{"testdata\\0.jpg"}, []string{}, []string{}, time.Time{}, "")
+	comics.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"1.jpg"}, []string{"testdata\\1.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	expectedImages, err := getFileContents("testdata\\1.jpg", "testdata\\0.jpg") // The order matters. Series have LIFO ordering
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"domain"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestGetFrontpageViewWithASingleComic(t *testing.T) {
@@ -15,7 +16,7 @@ func TestGetFrontpageViewWithASingleComic(t *testing.T) {
 	vs := NewFakeViewStore()
 	d := domain.NewComicDomain(es, fs, vs)
 	id := uuid.NewRandom()
-	d.AddComic(id, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"source//path//0.jpg", "source//path//1.jpg"})
+	d.AddComic(id, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg", "1.jpg"}, []string{"source//path//0.jpg", "source//path//1.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	actual := d.GetFrontPageView()
 
@@ -49,8 +50,8 @@ func TestGetFrontpageViewWithMultipleSeries(t *testing.T) {
 	d := domain.NewComicDomain(es, fs, vs)
 	walkingDeadId := uuid.NewRandom()
 	warriorId := uuid.NewRandom()
-	d.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg"}, []string{"source//path//0.jpg"})
-	d.AddComic(warriorId, "Warrior", "Warrior 1", []string{"0.jpg"}, []string{"source//path//0.jpg"})
+	d.AddComic(walkingDeadId, "The Walking Dead", "The Walking Dead 115", []string{"0.jpg"}, []string{"source//path//0.jpg"}, []string{}, []string{}, time.Time{}, "")
+	d.AddComic(warriorId, "Warrior", "Warrior 1", []string{"0.jpg"}, []string{"source//path//0.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	actual := d.GetFrontPageView()
 	expected := &domain.FrontPageView{
@@ -75,8 +76,8 @@ func TestGetFrontpageViewWithMultipleComicsFromTheSameSeries(t *testing.T) {
 	d := domain.NewComicDomain(es, fs, vs)
 	firstId := uuid.NewRandom()
 	lastId := uuid.NewRandom()
-	d.AddComic(firstId, "The Walking Dead", "The Walking Dead 114", []string{"0.jpg"}, []string{"source//path//0.jpg"})
-	d.AddComic(lastId, "The Walking Dead", "The Walking Dead 115", []string{"1.jpg"}, []string{"source//path//1.jpg"})
+	d.AddComic(firstId, "The Walking Dead", "The Walking Dead 114", []string{"0.jpg"}, []string{"source//path//0.jpg"}, []string{}, []string{}, time.Time{}, "")
+	d.AddComic(lastId, "The Walking Dead", "The Walking Dead 115", []string{"1.jpg"}, []string{"source//path//1.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	actual := d.GetFrontPageView()
 

@@ -5,9 +5,10 @@ import (
 	"domain/model"
 	"errors"
 	"log"
+	"time"
 )
 
-func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pageSources []string, eventstorer EventStorer, filestorer FileStorer, fpVs *frontPageViewStore, comicVs *comicViewStore) error {
+func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages, pageSources, writtenBy, artBy []string, publishedDate time.Time, blurb string, eventstorer EventStorer, filestorer FileStorer, fpVs *frontPageViewStore, comicVs *comicViewStore, seriesVs *seriesViewStore) error {
 	series, err := model.NewSeriesTitle(seriesTitle)
 	if err != nil {
 		return err
@@ -26,7 +27,15 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 		return errors.New("At least one page source is required")
 	}
 
-	event := model.NewComicAdded(model.NewComicId(newId), series, title, pages)
+	event := model.NewComicAdded(
+		model.NewComicId(newId),
+		series,
+		title,
+		writtenBy,
+		artBy,
+		pages,
+		publishedDate,
+		blurb)
 
 	log.Printf("Storing new comic book %v\n", event)
 
@@ -34,6 +43,7 @@ func addComic(newId uuid.UUID, seriesTitle, bookTitle string, pages []string, pa
 	filestorer.Store(event.Id.String(), pages, pageSources) // TODO: Deal with errors from the filestorer
 	comicVs.Store(event)
 	fpVs.Store(event)
+	seriesVs.Store(event)
 
 	return nil
 }

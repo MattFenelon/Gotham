@@ -4,6 +4,7 @@ import (
 	"domain/model"
 	"persistence/riak"
 	"testing"
+	"time"
 )
 
 func TestComicAdded(t *testing.T) {
@@ -11,7 +12,7 @@ func TestComicAdded(t *testing.T) {
 
 	seriesTitle, _ := model.NewSeriesTitle("Prophet")
 	title, _ := model.NewBookTitle("Prophet 31")
-	expectedEvent := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"0.jpg", "1.jpg"})
+	expectedEvent := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"Writer", "Another writer"}, []string{"Artist", "Another artist"}, []string{"0.jpg", "1.jpg"}, time.Date(2012, time.December, 1, 0, 0, 0, 0, time.UTC), "Blurb")
 
 	StoreEvent(t, expectedEvent)
 	defer DeleteEvent(t, expectedEvent.Id.String())
@@ -29,13 +30,13 @@ func TestAddingMultipleEvents(t *testing.T) {
 
 	seriesTitle, _ := model.NewSeriesTitle("Spider-men")
 	title, _ := model.NewBookTitle("Spider-men 1")
-	expectedEvent1 := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"1.jpg", "2.jpg"})
+	expectedEvent1 := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"Spider-men Writer"}, []string{"Spider-men Artist"}, []string{"1.jpg", "2.jpg"}, time.Date(2013, time.January, 23, 0, 0, 0, 0, time.UTC), "Spider-man Blurb")
 	StoreEvent(t, expectedEvent1)
 	defer DeleteEvent(t, expectedEvent1.Id.String())
 
 	seriesTitle, _ = model.NewSeriesTitle("Guardians of the Galaxy")
 	title, _ = model.NewBookTitle("Guardians of the Galaxy 11")
-	expectedEvent2 := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"0.jpg"})
+	expectedEvent2 := model.NewComicAdded(model.NewRandomComicId(), seriesTitle, title, []string{"Guardians of the Galaxy Writer"}, []string{"Guardians of the Galaxy Artist"}, []string{"0.jpg"}, time.Date(2010, time.July, 30, 0, 0, 0, 0, time.UTC), "Guardians of the Galaxy Blurb")
 	StoreEvent(t, expectedEvent2)
 	defer DeleteEvent(t, expectedEvent2.Id.String())
 

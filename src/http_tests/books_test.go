@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestAddBook(t *testing.T) {
@@ -21,7 +22,11 @@ func TestAddBook(t *testing.T) {
 
 	metadata := `{
 	"seriesTitle": "Prophet",
-	"title": "Prophet 31"
+	"title": "Prophet 31",
+	"publishedDate": "2012-11-28T00:00:00Z",
+	"writtenBy": ["Brandon Graham", "Simon Roy", "Giannis Milonogiannis"],
+	"artBy": ["Giannis Milonogiannis"],
+	"blurb": "Old Man Prophet goes to meet with a lost matriarchal tribe of humanity to try to form an alliance."
 }`
 
 	var buffer bytes.Buffer
@@ -40,6 +45,8 @@ func TestAddBook(t *testing.T) {
 	bodyBytes, _ := ioutil.ReadAll(rsp.Body)
 	body := string(bodyBytes)
 
+	actualEvents := api.es.GetAllEvents()
+
 	t.Log("The response should be 204 No Content")
 	if rsp.StatusCode != 204 {
 		t.Errorf("\tExpected 204 but was %v", rsp.StatusCode)
@@ -50,10 +57,43 @@ func TestAddBook(t *testing.T) {
 		t.Errorf("\tExpected \"\" but was %v", body)
 	}
 
-	t.Log("The comic data should be persisted")
-	actualEvents := api.es.GetAllEvents()
-	if len(actualEvents) == 0 || actualEvents[0].Title != "Prophet 31" {
-		t.Errorf("\tExpected 1 items but contained %v", actualEvents)
+	t.Log("The comic should be persisted")
+	if len(actualEvents) != 1 {
+		t.Errorf("\tExpected 1 items but contained %v", len(actualEvents))
+	}
+
+	t.Log("The comic's title should be persisted")
+	if actualEvents[0].Title != "Prophet 31" {
+		t.Errorf("\tExpected %v but contained %v", "Prophet 31", actualEvents[0].Title)
+	}
+
+	t.Log("The comic's series title should be persisted")
+	if actualEvents[0].SeriesTitle != "Prophet" {
+		t.Errorf("\tExpected %v but contained %v", "Prophet", actualEvents[0].SeriesTitle)
+	}
+
+	t.Log("The comic's published date should be persisted")
+	expectedDate := time.Date(2012, time.November, 28, 0, 0, 0, 0, time.UTC)
+	if actualEvents[0].PublishedDate != expectedDate {
+		t.Errorf("\tExpected %v but contained %v", expectedDate, actualEvents[0].PublishedDate)
+	}
+
+	t.Log("The comic's writers should be persisted")
+	expectedWriters := []string{"Brandon Graham", "Simon Roy", "Giannis Milonogiannis"}
+	if reflect.DeepEqual(expectedWriters, actualEvents[0].WrittenBy) == false {
+		t.Errorf("\tExpected %v but contained %v", expectedWriters, actualEvents[0].WrittenBy)
+	}
+
+	t.Log("The comic's artists should be persisted")
+	expectedArtists := []string{"Giannis Milonogiannis"}
+	if reflect.DeepEqual(expectedArtists, actualEvents[0].ArtBy) == false {
+		t.Errorf("\tExpected %v but contained %v", expectedArtists, actualEvents[0].ArtBy)
+	}
+
+	t.Log("The comic's blurb should be persisted")
+	expectedBlurb := "Old Man Prophet goes to meet with a lost matriarchal tribe of humanity to try to form an alliance."
+	if actualEvents[0].Blurb != expectedBlurb {
+		t.Errorf("\tExpected %v but contained %v", expectedBlurb, actualEvents[0].Blurb)
 	}
 
 	t.Log("The comic pages should be persisted using the filenames specified in the form")

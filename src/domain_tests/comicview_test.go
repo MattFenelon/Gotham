@@ -5,6 +5,7 @@ import (
 	"domain"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestGetComicView(t *testing.T) {
@@ -16,7 +17,7 @@ func TestGetComicView(t *testing.T) {
 	d := domain.NewComicDomain(es, fs, vs)
 
 	id := uuid.NewRandom()
-	d.AddComic(id, "The Saga of The Swamp Thing", "Swamp Thing 20", []string{"0.jpg", "1.jpg", "2.jpg"}, []string{"path//to//0.jpg", "path//to//1.jpg", "path//to//2.jpg"})
+	d.AddComic(id, "The Saga of The Swamp Thing", "Swamp Thing 20", []string{"0.jpg", "1.jpg", "2.jpg"}, []string{"path//to//0.jpg", "path//to//1.jpg", "path//to//2.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	actual := d.GetComicView(id)
 	expected := &domain.ComicView{

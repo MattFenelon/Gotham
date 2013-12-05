@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func TestBookGetBook(t *testing.T) {
@@ -16,7 +17,7 @@ func TestBookGetBook(t *testing.T) {
 
 	comics := domain.NewComicDomain(api.es, api.fs, api.vs)
 	fataleId := uuid.NewRandom()
-	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"})
+	comics.AddComic(fataleId, "Fatale", "Fatale 18", []string{"0.jpg", "1.jpg"}, []string{"testdata\\0.jpg", "testdata\\1.jpg"}, []string{}, []string{}, time.Time{}, "")
 
 	bookUri := api.URL() + "/books/" + fataleId.String()
 

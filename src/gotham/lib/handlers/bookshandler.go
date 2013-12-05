@@ -10,11 +10,16 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 type addBookMetadata struct {
-	SeriesTitle string
-	Title       string
+	SeriesTitle   string
+	Title         string
+	PublishedDate time.Time
+	WrittenBy     []string
+	ArtBy         []string
+	Blurb         string
 }
 
 type addBookForm struct {
@@ -44,7 +49,7 @@ func BooksHandler(w http.ResponseWriter, r *http.Request, d domain.ComicDomain) 
 		return
 	}
 
-	if err := d.AddComic(uuid.NewRandom(), form.metadata.SeriesTitle, form.metadata.Title, form.pageFilenames, form.pageSources); err != nil { // TODO: Raise different types of errors, i.e. database
+	if err := d.AddComic(uuid.NewRandom(), form.metadata.SeriesTitle, form.metadata.Title, form.pageFilenames, form.pageSources, form.metadata.WrittenBy, form.metadata.ArtBy, form.metadata.PublishedDate, form.metadata.Blurb); err != nil { // TODO: Raise different types of errors, i.e. database
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
