@@ -12,6 +12,7 @@ type FrontPageViewSeries struct {
 	Title          string
 	ImageKey       string
 	PromotedBookId string
+	SeriesKey      string
 }
 
 type frontPageViewStore struct {
@@ -39,6 +40,7 @@ func (viewStore *frontPageViewStore) Store(event *model.ComicAdded) {
 			Title:          event.SeriesTitle.String(),
 			ImageKey:       event.Id.String() + "/" + event.Pages[0],
 			PromotedBookId: event.Id.String(),
+			SeriesKey:      event.SeriesTitle.String(),
 		},
 	}
 
