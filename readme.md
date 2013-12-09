@@ -114,7 +114,6 @@ Content-Type: application/json
 	"publishedDate": "2012-11-28T00:00:00Z", // RFC 3339 format
 	"writtenBy": ["Brandon Graham", "Simon Roy", "Giannis Milonogiannis"],
 	"artBy": ["Giannis Milonogiannis"],
-	"coverBy": "Boo Cook",
 	"blurb": "Old Man Prophet goes to meet with a lost matriarchal tribe of humanity to try to form an alliance."
 }
 --Any-ASCII-string
