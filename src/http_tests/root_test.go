@@ -47,8 +47,20 @@ func TestRootGet(t *testing.T) {
 	t.Log("\tThe response body should include all comics in JSON format")
 	expectedBody :=
 		`{"series":[` +
-			`{"title":"The Walking Dead","links":[{"rel":"seriesimage","href":"` + api.URL() + `/pages/` + walkingDeadId.String() + `/0.jpg"},{"rel":"promotedbook","href":"` + api.URL() + `/books/` + walkingDeadId.String() + `"}]},` +
-			`{"title":"Fatale","links":[{"rel":"seriesimage","href":"` + api.URL() + `/pages/` + fataleId.String() + `/0.jpg"},{"rel":"promotedbook","href":"` + api.URL() + `/books/` + fataleId.String() + `"}]}` +
+			`{` +
+			`"title":"The Walking Dead",` +
+			`"links":[` +
+			`{"rel":"self","href":"` + api.URL() + `/series/The%20Walking%20Dead"},` +
+			`{"rel":"seriesimage","href":"` + api.URL() + `/pages/` + walkingDeadId.String() + `/0.jpg"},` +
+			`{"rel":"promotedbook","href":"` + api.URL() + `/books/` + walkingDeadId.String() + `"}` +
+			`]},` +
+			`{` +
+			`"title":"Fatale",` +
+			`"links":[` +
+			`{"rel":"self","href":"` + api.URL() + `/series/Fatale"},` +
+			`{"rel":"seriesimage","href":"` + api.URL() + `/pages/` + fataleId.String() + `/0.jpg"},` +
+			`{"rel":"promotedbook","href":"` + api.URL() + `/books/` + fataleId.String() + `"}` +
+			`]}` +
 			`]}` + "\n"
 
 	if actualBody != expectedBody {
@@ -90,7 +102,7 @@ func TestRootGetSeriesImage(t *testing.T) {
 
 	for i, s := range root.Series {
 		expectedImage := expectedImages[i]
-		checkSeriesImage(t, s.Links[0].Href, expectedImage)
+		checkSeriesImage(t, s.Links[1].Href, expectedImage)
 	}
 }
 

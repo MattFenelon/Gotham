@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type rootView struct {
@@ -30,9 +31,11 @@ func RootHandler(w http.ResponseWriter, r *http.Request, d domain.ComicDomain) {
 	}
 
 	for _, s := range src.Series {
+		selfPath, _ := url.Parse("/series/" + s.SeriesKey)
 		series := rootViewSeries{
 			Title: s.Title,
 			Links: []linkView{
+				linkView{Rel: "self", Href: fmt.Sprintf("http://%v%v", r.Host, selfPath.RequestURI())},
 				linkView{Rel: "seriesimage", Href: fmt.Sprintf("http://%v/pages/%v", r.Host, s.ImageKey)},
 				linkView{Rel: "promotedbook", Href: fmt.Sprintf("http://%v/books/%v", r.Host, s.PromotedBookId)},
 			},
