@@ -38,7 +38,7 @@ func TestBookGetBook(t *testing.T) {
 		t.Error("\t\t\tExpected 200 but was", rsp.StatusCode)
 	}
 
-	t.Log("\t\tThe response body should contain to the comic's page images")
+	t.Log("\t\tThe response body should contain the comic's page images")
 	expectedBody := `{"links":[` +
 		`{"rel":"item","href":"` + api.URL() + `/pages/` + fataleId.String() + `/0.jpg"},` +
 		`{"rel":"item","href":"` + api.URL() + `/pages/` + fataleId.String() + `/1.jpg"}]}` + "\n"
