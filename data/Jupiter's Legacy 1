@@ -9,7 +9,11 @@ Content-Disposition: form-data; name="metadata"
 
 {
 "seriesTitle": "Jupiter's Legacy",
-"title": "Jupiter's Legacy 1"
+"title": "Jupiter's Legacy 1",
+"publishedDate": "2013-04-24T00:00:00Z",
+"writtenBy": ["Mark Millar"],
+"artBy": ["Frank Quitely"],
+"blurb": "The comic-book event of 2013 finally arrives as superstar creators MARK MILLAR and FRANK QUITELY give us the superhero epic that all future comics will be measured by. The world's greatest heroes have grown old and their legacy is a poisonous one to the children who will never live up to their remarkable parents. Unmissable."
 }
 ---------------------------acebdf13572468
 Content-Disposition: form-data; name="page"; filename="0.jpg"

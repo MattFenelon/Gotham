@@ -9,7 +9,11 @@ Content-Disposition: form-data; name="metadata"
 
 {
 "seriesTitle": "Prophet",
-"title": "Prophet 30"
+"title": "Prophet 30",
+"publishedDate": "2012-10-24T00:00:00Z",
+"writtenBy": ["Brandon Graham", "Simon Roy", "Giannis Milonogiannis"],
+"artBy": ["Giannis Milonogiannis"],
+"blurb": "Old man Prophet's team goes looking for supplies on a city built into the torso of a giant at war with its other body parts. And an old acquaintance."
 }
 ---------------------------acebdf13572468
 Content-Disposition: form-data; name="page"; filename="0.jpg"
