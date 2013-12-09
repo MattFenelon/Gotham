@@ -67,7 +67,7 @@ Content-Type: application/json
 			"blurb": "THE SMASH-HIT, CRITICALLY ACCLAIMED SERIES RETURNS!\nNow that you've read the first two bestselling collections of SAGA, you're all caught up and ready to jump on the ongoing train with Chapter Thirteen, beginning an all-new monthly sci-fi/fantasy adventure, as Hazel and her parents head to the planet Quietus in search of cult romance novelist D. Oswald Heist.",
 			"links": [
 				{"rel":"self", "href": "http://gotham/books/{opaque}"},
-				{"rel":"bookimage", "href": "http://gotham/pages/{opaque}"}
+				{"rel":"image", "href": "http://gotham/pages/{opaque}"}
 			]
 		},
 		{
@@ -78,7 +78,7 @@ Content-Type: application/json
 			"blurb": "Prince Robot IV makes his move.",
 			"links": [
 				{"rel":"self", "href": "http://gotham/books/{opaque}"},
-				{"rel":"bookimage", "href": "http://gotham/pages/{opaque}"}
+				{"rel":"image", "href": "http://gotham/pages/{opaque}"}
 			]
 		}
 	]
