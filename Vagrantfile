@@ -15,7 +15,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network :forwarded_port, guest: 8087, host: 8087
+
+  # Gotham API
+  config.vm.network :forwarded_port, guest: 80, host: 7001
+
+  # Riak web interface
   config.vm.network :forwarded_port, guest: 8098, host: 8098
   
   # Default synched folder

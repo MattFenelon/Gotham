@@ -15,10 +15,10 @@ func StartServer() {
 
 	eventstore := riak.NewRiakEventStore(riakCluster, riakClientId)
 	viewstore := riak.NewViewStore(riakCluster, riakClientId)
-	filestore := filestore.NewLocalFileStore("c:\\gothamfs")
+	filestore := filestore.NewLocalFileStore("/var/lib/gotham")
 	exports := Configure(eventstore, filestore, viewstore)
 
-	err := http.ListenAndServe(":7001", exports.Handler)
+	err := http.ListenAndServe(":80", exports.Handler)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
