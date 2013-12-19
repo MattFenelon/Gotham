@@ -37,7 +37,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Enable shell provisioning
   config.vm.provision :shell, :path => "vagrant/bootstrap.sh"
   # Install and configure riak
-  config.vm.provision :shell, :path => "scripts/riak_install.sh", :args => ["/vagrant/scripts/riak_config/"]
+  config.vm.provision :shell, :path => "env/riak/riak_install.sh", :args => ["/vagrant/env/riak/config/"]
   # Set up for API development (install Go and set GOPATH)
-  config.vm.provision :shell, :path => "scripts/golang_install.sh"
+  config.vm.provision :shell, :path => "env/golang/golang_install.sh"
 end
