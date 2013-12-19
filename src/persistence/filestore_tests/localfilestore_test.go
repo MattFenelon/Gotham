@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"persistence/filestore"
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -16,11 +18,11 @@ func TestStoringFiles(t *testing.T) {
 	defer os.RemoveAll(path)
 
 	fs := filestore.NewLocalFileStore(path)
-	fs.Store("test_key", []string{"one", "two"}, []string{"testdata\\1.txt", "testdata\\2.txt"})
+	fs.Store("test_key", []string{"one", "two"}, []string{filepath.Join("testdata", "1.txt"), filepath.Join("testdata", "2.txt")})
 
 	t.Log("It should store the files using the specified filenames")
 
-	f1, err := fs.Open("test_key\\one")
+	f1, err := fs.Open(filepath.Join("test_key", "one"))
 	defer f1.Close()
 	if err != nil {
 		t.Error(err)
@@ -33,7 +35,7 @@ func TestStoringFiles(t *testing.T) {
 		t.Errorf("Expected %s but was %s", []byte("1"), actual)
 	}
 
-	f2, err := fs.Open("test_key\\two")
+	f2, err := fs.Open(filepath.Join("test_key", "two"))
 	defer f2.Close()
 	if err != nil {
 		t.Error(err)
@@ -55,6 +57,7 @@ func TestStoringFiles(t *testing.T) {
 
 	t.Log("It should list the filenames under the key")
 	actualFilenames, _ := fs.GetFilenames("test_key")
+	sort.Strings(actualFilenames)
 	expectedFilenames := []string{"one", "two"}
 	if reflect.DeepEqual(actualFilenames, expectedFilenames) == false {
 		t.Errorf("\tExpected %v but was %v", expectedFilenames, actualFilenames)
