@@ -7,7 +7,4 @@
 stop gotham -q
 rm -Rf /usr/local/gotham
 
-mkdir /usr/local/gotham
-cp gotham /usr/local/gotham
-
-rsync -rv gotham_config/ /
+rsync -rv ./ / --exclude "gotham_install.sh"

@@ -2,9 +2,15 @@
 
 # This script builds, deploys and installs the gotham API onto DigitalOcean.
 
-pushd /vagrant/src/gotham
-go install
+set -e
+
+pushd /vagrant
+./gotham_build.sh
+./gotham_package.sh
 popd
 
-scp -Cri /ssh_keys/digital_ocean /vagrant/scripts/gotham_config /vagrant/scripts/gotham_install.sh /vagrant/bin/gotham root@162.243.69.92:~/
-ssh -i /ssh_keys/digital_ocean root@162.243.69.92 '~/gotham_install.sh'
+pushd /vagrant/inst
+ssh -i /ssh_keys/digital_ocean root@162.243.69.92 'rm -rf ~/gotham_pkg && mkdir ~/gotham_pkg'
+scp -Cri /ssh_keys/digital_ocean ./ root@162.243.69.92:~/gotham_pkg
+ssh -i /ssh_keys/digital_ocean root@162.243.69.92 'cd ~/gotham_pkg/ && sudo ./gotham_install.sh && sudo start gotham'
+popd
