@@ -32,8 +32,8 @@ func TestAddBook(t *testing.T) {
 	var buffer bytes.Buffer
 	writer := multipart.NewWriter(&buffer)
 	writeMetadata(writer, metadata)
-	image1 := writeImageData(t, writer, "testdata\\0.jpg")
-	image2 := writeImageData(t, writer, "testdata\\1.jpg")
+	image1 := writeImageData(t, writer, filepath.Join("testdata", "0.jpg"))
+	image2 := writeImageData(t, writer, filepath.Join("testdata", "1.jpg"))
 	writer.Close()
 
 	rsp, err := http.Post(api.URL()+"/books", writer.FormDataContentType(), &buffer)
