@@ -8,7 +8,7 @@ import (
 
 func makeFilestoreHandler(path string, filestore FileStore) http.Handler {
 	return http.StripPrefix(path,
-		http.FileServer(filestoreFilesystem(func(name string) (http.File, error) {
+		http.FileServer(openFileFunc(func(name string) (http.File, error) {
 			return filestore.Open(name)
 		})))
 }
@@ -18,8 +18,8 @@ type FileStore interface {
 	Open(name string) (*os.File, error)
 }
 
-type filestoreFilesystem func(name string) (http.File, error)
+type openFileFunc func(name string) (http.File, error)
 
-func (fs filestoreFilesystem) Open(name string) (http.File, error) {
-	return fs(name)
+func (openFunc openFileFunc) Open(name string) (http.File, error) {
+	return openFunc(name)
 }

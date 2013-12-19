@@ -22,11 +22,12 @@ func NewLocalFileStore(path string) *LocalFileStore {
 func (store *LocalFileStore) Store(key string, filenames, sourcePaths []string) error {
 	keypath := store.getKeyPath(key)
 
-	os.MkdirAll(keypath, os.ModeDir)
+	os.MkdirAll(keypath, 0700)
 	for i, srcpath := range sourcePaths {
 		dstpath := filepath.Join(keypath, filenames[i])
 		log.Printf("copying from %v to %v\n", srcpath, dstpath)
 		if err := copy(dstpath, srcpath); err != nil {
+			log.Println(err)
 			return err
 		}
 	}
@@ -36,6 +37,7 @@ func (store *LocalFileStore) Store(key string, filenames, sourcePaths []string) 
 
 func (store *LocalFileStore) Open(name string) (*os.File, error) {
 	p := filepath.Join(store.path, name)
+	log.Printf("Opening file path %v for key %v", p, name)
 	return os.Open(p)
 }
 
