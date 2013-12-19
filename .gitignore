@@ -3,3 +3,5 @@ src/**/*.exe
 bin/
 pkg/
 .vagrant/
+# generated installation files
+inst/
