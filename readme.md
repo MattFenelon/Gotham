@@ -163,3 +163,13 @@ Content-Type: application/json
 	]
 }
 ```
+
+## Contributing
+
+### Directory Structure
+
+* digitalocean/ - scripts to configure and deploy to DigitalOcean.
+* env/ - common scripts for provisioning deployment environments. These may be shared between environments, e.g. DigitalOcean and Vagrant.
+* etc/ - configuration scripts for the Gotham program itself.
+* src/ - Source code for Gotham, including dependencies brought in by go.
+* vagrant/ - vagrant specific provisioning script files.

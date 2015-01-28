@@ -33,3 +33,16 @@ func NewComicDomain(es EventStorer, fs FileStorer, vs ViewGetStorer) ComicDomain
 		},
 	}
 }
+
+type Dependencies struct {
+	es EventStorer
+	fs FileStorer
+	vs ViewGetStorer
+}
+
+func NewComicDomainWithDependenciesCallback(c func(d Dependencies)) ComicDomain {
+	d := &Dependencies{}
+	c(d)
+
+	return NewComicDomain(d.es, d.fs, d.vs)
+}
